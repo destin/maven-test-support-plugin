@@ -1,0 +1,47 @@
+<idea-plugin version="2">
+  <id>org.dpytel.intellij.plugin.maventest</id>
+  <name>Maven tests support plugin</name>
+  <version>1.0</version>
+  <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
+
+  <description><![CDATA[
+      Maven tests support plugin.<br>
+      <small>most HTML tags may be used</small>
+      ]]></description>
+
+  <change-notes><![CDATA[
+      Add change notes here.<br>
+      <small>most HTML tags may be used</small>
+      ]]>
+  </change-notes>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Build+Number+Ranges for description -->
+  <idea-version since-build="107.105"/>
+
+  <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
+       on how to target different products -->
+
+  <depends>JUnit</depends>
+
+  <application-components>
+    <!-- Add your application components here -->
+  </application-components>
+
+  <project-components>
+    <!-- Add your project components here -->
+  </project-components>
+
+  <actions>
+      <group id="MavenTest.MenuGroup" text="_Maven Tests" description="Maven Tests">
+          <add-to-group group-id="ProjectViewPopupMenu" anchor="last"  />
+          <action id="MavenTest.ShowTestResults"
+                  class="org.dpytel.intellij.plugin.maventest.ShowTestResultsAction"
+                  text="Show Test Results"
+                  description="Displays results of all tests in given project" />
+      </group>
+  </actions>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+</idea-plugin>
