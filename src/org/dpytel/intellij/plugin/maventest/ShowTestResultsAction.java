@@ -78,7 +78,7 @@ public class ShowTestResultsAction extends AnAction {
 
     private void processReportsDir(VirtualFile baseDir, TestProxy root, SuiteState suiteState, String reportDir) {
         VirtualFile reportsDir = baseDir.findFileByRelativePath(reportDir);
-        if (reportDir != null && reportsDir.exists()) {
+        if (reportsDir != null && reportsDir.exists()) {
             addReports(root, suiteState, reportsDir);
         }
     }
