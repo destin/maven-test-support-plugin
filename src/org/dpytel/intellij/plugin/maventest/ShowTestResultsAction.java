@@ -9,8 +9,6 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.info.TestInfo;
 import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.execution.junit2.ui.JUnitTreeConsoleView;
-import com.intellij.execution.junit2.ui.model.CompletionEvent;
-import com.intellij.execution.junit2.ui.model.JUnitListenersNotifier;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -45,10 +43,10 @@ public class ShowTestResultsAction extends AnAction {
         final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
         final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, null, null, null);
         consoleView.initUI();
-        JUnitRunningModel model = createModel(project, consoleProperties);
+        VirtualFile selectedFile = event.getData(PlatformDataKeys.VIRTUAL_FILE);
+        JUnitRunningModel model = createModel(selectedFile, consoleProperties);
         consoleView.attachToModel(model);
-        JUnitListenersNotifier notifier = model.getNotifier();
-        notifier.fireRunnerStateChanged(new CompletionEvent(true, -1));
+
 
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         ToolWindow toolWindow = toolWindowManager.getToolWindow("maven-test");
@@ -62,8 +60,7 @@ public class ShowTestResultsAction extends AnAction {
         contentManager.addContent(content);
     }
 
-    private JUnitRunningModel createModel(Project project, JUnitConsoleProperties consoleProperties) {
-        VirtualFile baseDir = project.getBaseDir();
+    private JUnitRunningModel createModel(VirtualFile baseDir, JUnitConsoleProperties consoleProperties) {
         TestInfo info = new NamedTestInfo("Root");
         TestProxy root = new TestProxy(info);
         SuiteState suiteState = new SuiteState(root);
