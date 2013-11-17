@@ -28,6 +28,7 @@ import org.dpytel.intellij.plugin.maventest.model.NamedTestInfo;
  */
 public class ShowTestResultsAction extends AnAction {
 
+    public static final String TOOL_WINDOW_ID = "Maven test results";
     private final ReportParser reportParser = new ReportParser();
 
     public ShowTestResultsAction() {
@@ -49,15 +50,17 @@ public class ShowTestResultsAction extends AnAction {
 
 
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        ToolWindow toolWindow = toolWindowManager.getToolWindow("maven-test");
+        ToolWindow toolWindow = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
         if (toolWindow == null) {
             toolWindow = toolWindowManager
-                .registerToolWindow("maven-test", true, ToolWindowAnchor.BOTTOM);
+                .registerToolWindow(TOOL_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
         }
+        toolWindow.activate(null);
         ContentManager contentManager = toolWindow.getContentManager();
         Content content = contentManager.getFactory()
             .createContent(consoleView.getComponent(), "Tests in " + project.getName(), false);
         contentManager.addContent(content);
+        contentManager.setSelectedContent(content);
     }
 
     private JUnitRunningModel createModel(VirtualFile baseDir, JUnitConsoleProperties consoleProperties) {

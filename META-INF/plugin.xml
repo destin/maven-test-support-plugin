@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven tests support plugin</name>
-  <version>1.0</version>
+  <version>0.0.1</version>
   <vendor email="support@yourcompany.com" url="http://www.yourcompany.com">YourCompany</vendor>
 
   <description><![CDATA[
@@ -10,7 +10,9 @@
       ]]></description>
 
   <change-notes><![CDATA[
-      Add change notes here.<br>
+      <ul>
+        <li>0.0.1 - Initial version
+      </ul><br>
       <small>most HTML tags may be used</small>
       ]]>
   </change-notes>
