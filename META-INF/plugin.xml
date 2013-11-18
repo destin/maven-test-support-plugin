@@ -12,6 +12,7 @@
   <change-notes><![CDATA[
       <ul>
         <li>0.0.1 - Initial version
+        <li>0.0.2 - Show test results action visible only on maven projects
       </ul><br>
       <small>most HTML tags may be used</small>
       ]]>
@@ -24,6 +25,7 @@
        on how to target different products -->
 
   <depends>JUnit</depends>
+  <depends>org.jetbrains.idea.maven</depends>
 
   <application-components>
     <!-- Add your application components here -->

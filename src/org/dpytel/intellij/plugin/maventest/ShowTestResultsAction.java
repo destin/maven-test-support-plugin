@@ -14,6 +14,7 @@ import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
@@ -22,6 +23,8 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import org.dpytel.intellij.plugin.maventest.model.NamedTestInfo;
+import org.jetbrains.idea.maven.project.MavenProject;
+import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 
 /**
  *
@@ -38,6 +41,7 @@ public class ShowTestResultsAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
+        MavenProject mavenProject = MavenActionUtil.getMavenProject(event.getDataContext());
         ConfigurationFactory configurationFactory = JUnitConfigurationType.getInstance().getConfigurationFactories()[0];
         JUnitConfiguration myConfiguration = new JUnitConfiguration("maven", project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
@@ -58,7 +62,7 @@ public class ShowTestResultsAction extends AnAction {
         toolWindow.activate(null);
         ContentManager contentManager = toolWindow.getContentManager();
         Content content = contentManager.getFactory()
-            .createContent(consoleView.getComponent(), "Tests in " + project.getName(), false);
+            .createContent(consoleView.getComponent(), mavenProject.getFinalName(), false);
         contentManager.addContent(content);
         contentManager.setSelectedContent(content);
     }
@@ -95,4 +99,25 @@ public class ShowTestResultsAction extends AnAction {
 
     }
 
+    @Override
+    public boolean isInInjectedContext() {
+        return super.isInInjectedContext();
+    }
+
+    @Override
+    public void update(AnActionEvent e) {
+        super.update(e);
+        Presentation p = e.getPresentation();
+        p.setEnabled(isAvailable(e));
+        p.setVisible(isVisible(e));
+    }
+
+    private boolean isAvailable(AnActionEvent e) {
+        return MavenActionUtil.hasProject(e.getDataContext());
+    }
+
+    private boolean isVisible(AnActionEvent e) {
+        MavenProject mavenProject = MavenActionUtil.getMavenProject(e.getDataContext());
+        return mavenProject != null;
+    }
 }
