@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven tests support plugin</name>
-  <version>0.0.2</version>
+  <version>0.0.3</version>
   <vendor email="support@yourcompany.com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -12,6 +12,7 @@
       <ul>
         <li>0.0.1 - Initial version
         <li>0.0.2 - Show test results action visible only on maven projects
+        <li>0.0.3 - Added icon for Show test results action
       </ul>
       ]]>
   </change-notes>
@@ -39,7 +40,8 @@
           <action id="MavenTest.ShowTestResults"
                   class="org.dpytel.intellij.plugin.maventest.ShowTestResultsAction"
                   text="Show Test Results"
-                  description="Displays results of all tests in given project" />
+                  description="Displays results of all tests in given project"
+                  icon="/icons/showResultsAction.png"/>
       </group>
   </actions>
 
