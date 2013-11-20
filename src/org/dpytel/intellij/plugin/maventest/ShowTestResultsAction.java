@@ -16,6 +16,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowAnchor;
@@ -32,6 +33,7 @@ import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 public class ShowTestResultsAction extends AnAction {
 
     public static final String TOOL_WINDOW_ID = "Maven test results";
+    private static final String TOOL_WINDOW_ICON = "/icons/showResultsToolWindow.png";
     private final ReportParser reportParser = new ReportParser();
 
     public ShowTestResultsAction() {
@@ -52,19 +54,7 @@ public class ShowTestResultsAction extends AnAction {
         JUnitRunningModel model = createModel(selectedFile, consoleProperties);
         consoleView.attachToModel(model);
 
-
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
-        ToolWindow toolWindow = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
-        if (toolWindow == null) {
-            toolWindow = toolWindowManager
-                .registerToolWindow(TOOL_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
-        }
-        toolWindow.activate(null);
-        ContentManager contentManager = toolWindow.getContentManager();
-        Content content = contentManager.getFactory()
-            .createContent(consoleView.getComponent(), mavenProject.getFinalName(), false);
-        contentManager.addContent(content);
-        contentManager.setSelectedContent(content);
+        showInToolWindow(project, mavenProject, consoleView);
     }
 
     private JUnitRunningModel createModel(VirtualFile baseDir, JUnitConsoleProperties consoleProperties) {
@@ -73,8 +63,13 @@ public class ShowTestResultsAction extends AnAction {
         SuiteState suiteState = new SuiteState(root);
         root.setState(suiteState);
         if (baseDir.exists()) {
-            processReportsDir(baseDir, root, suiteState, "target/surefire-reports");
-            processReportsDir(baseDir, root, suiteState, "target/failsafe-reports");
+            baseDir.refresh(false, false);
+            VirtualFile target = baseDir.findChild("target");
+            if (target != null && target.exists()) {
+                target.refresh(false, false);
+                processReportsDir(target, root, suiteState, "surefire-reports");
+                processReportsDir(target, root, suiteState, "failsafe-reports");
+            }
         }
         JUnitRunningModel model = new JUnitRunningModel(root, consoleProperties);
         return model;
@@ -85,6 +80,22 @@ public class ShowTestResultsAction extends AnAction {
         if (reportsDir != null && reportsDir.exists()) {
             addReports(root, suiteState, reportsDir);
         }
+    }
+
+    private void showInToolWindow(Project project, MavenProject mavenProject, JUnitTreeConsoleView consoleView) {
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
+        ToolWindow toolWindow = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
+        if (toolWindow == null) {
+            toolWindow = toolWindowManager
+                .registerToolWindow(TOOL_WINDOW_ID, true, ToolWindowAnchor.BOTTOM);
+            toolWindow.setIcon(IconLoader.findIcon(TOOL_WINDOW_ICON));
+        }
+        toolWindow.activate(null);
+        ContentManager contentManager = toolWindow.getContentManager();
+        Content content = contentManager.getFactory()
+            .createContent(consoleView.getComponent(), mavenProject.getFinalName(), false);
+        contentManager.addContent(content);
+        contentManager.setSelectedContent(content);
     }
 
     private void addReports(TestProxy root, SuiteState suiteState, VirtualFile reportsDir) {

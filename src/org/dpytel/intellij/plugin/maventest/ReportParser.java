@@ -18,7 +18,7 @@ public class ReportParser {
     public ReportParser() {
     }
 
-    TestProxy parseTestSuite(VirtualFile child) {
+    public TestProxy parseTestSuite(VirtualFile child) {
         try {
             SAXBuilder builder = new SAXBuilder();
             Document document = builder.build(child.getInputStream());
@@ -53,7 +53,7 @@ public class ReportParser {
                 String message = errorOrFailure.getAttributeValue("message");
                 testCase.setState(new SkippedState(testCase, message));
             } else {
-                FailOrErrorState state = null;
+                FailOrErrorState state;
                 if ("failure".equals(stateName)) {
                     state = FailOrErrorState.createFailedState(errorOrFailure.getText());
                 } else if ("error".equals(stateName)) {
@@ -71,7 +71,7 @@ public class ReportParser {
                     if ("system-out".equals(name)) {
                         sysout.append(text);
                     } else if ("system-err".equals(name)) {
-                        sysout.append(text);
+                        syserr.append(text);
                     }
                 }
                 state.setSystemout(sysout.toString());
