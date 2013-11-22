@@ -5,8 +5,9 @@ import com.intellij.execution.junit2.states.NotFailedState;
 import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.dpytel.intellij.plugin.maventest.model.FailOrErrorState;
-import org.dpytel.intellij.plugin.maventest.model.NamedTestInfo;
 import org.dpytel.intellij.plugin.maventest.model.SkippedState;
+import org.dpytel.intellij.plugin.maventest.model.TestMethodInfo;
+import org.dpytel.intellij.plugin.maventest.model.TestSuiteInfo;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -24,7 +25,8 @@ public class ReportParser {
             Document document = builder.build(child.getInputStream());
             Element rootElement = document.getRootElement();
             Attribute name = rootElement.getAttribute("name");
-            TestProxy testSuite = new TestProxy(new NamedTestInfo(name.getValue()));
+            TestProxy testSuite = new TestProxy(new TestSuiteInfo(name.getValue()));
+            @SuppressWarnings("unchecked")
             List<Element> testcases = rootElement.getChildren("testcase");
             SuiteState suiteState = new SuiteState(testSuite);
             testSuite.setState(suiteState);
@@ -40,9 +42,10 @@ public class ReportParser {
         }
     }
 
-    TestProxy parseTestCase(Element testcase) {
-        Attribute nameAttr = testcase.getAttribute("name");
-        TestProxy testCase = new TestProxy(new NamedTestInfo(nameAttr.getValue()));
+    private TestProxy parseTestCase(Element testcase) {
+        String methodName = testcase.getAttributeValue("name");
+        String className = testcase.getAttributeValue("classname");
+        TestProxy testCase = new TestProxy(new TestMethodInfo(className, methodName));
         List children = testcase.getChildren();
         if (children.size() == 0) {
             testCase.setState(NotFailedState.createPassed());

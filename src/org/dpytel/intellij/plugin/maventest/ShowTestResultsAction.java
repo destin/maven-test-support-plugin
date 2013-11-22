@@ -6,10 +6,10 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.TestProxy;
-import com.intellij.execution.junit2.info.TestInfo;
 import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.execution.junit2.ui.JUnitTreeConsoleView;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
+import com.intellij.execution.junit2.ui.model.RootTestInfo;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -23,7 +23,6 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
-import org.dpytel.intellij.plugin.maventest.model.NamedTestInfo;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 
@@ -44,22 +43,28 @@ public class ShowTestResultsAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         MavenProject mavenProject = MavenActionUtil.getMavenProject(event.getDataContext());
-        ConfigurationFactory configurationFactory = JUnitConfigurationType.getInstance().getConfigurationFactories()[0];
+        JUnitConfigurationType jUnitConfigurationType = JUnitConfigurationType.getInstance();
+        if (jUnitConfigurationType == null) {
+            return;
+        }
+        ConfigurationFactory configurationFactory = jUnitConfigurationType.getConfigurationFactories()[0];
         JUnitConfiguration myConfiguration = new JUnitConfiguration("maven", project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
         final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
         final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, null, null, null);
         consoleView.initUI();
         VirtualFile selectedFile = event.getData(PlatformDataKeys.VIRTUAL_FILE);
-        JUnitRunningModel model = createModel(selectedFile, consoleProperties);
+        JUnitRunningModel model = createModel(mavenProject, selectedFile, consoleProperties);
         consoleView.attachToModel(model);
 
         showInToolWindow(project, mavenProject, consoleView);
     }
 
-    private JUnitRunningModel createModel(VirtualFile baseDir, JUnitConsoleProperties consoleProperties) {
-        TestInfo info = new NamedTestInfo("Root");
-        TestProxy root = new TestProxy(info);
+    private JUnitRunningModel createModel(MavenProject mavenProject, VirtualFile baseDir,
+                                          JUnitConsoleProperties consoleProperties) {
+        RootTestInfo rootInfo = new RootTestInfo();
+        rootInfo.setName(mavenProject.getMavenId().getArtifactId());
+        TestProxy root = new TestProxy(rootInfo);
         SuiteState suiteState = new SuiteState(root);
         root.setState(suiteState);
         if (baseDir.exists()) {
@@ -71,8 +76,7 @@ public class ShowTestResultsAction extends AnAction {
                 processReportsDir(target, root, suiteState, "failsafe-reports");
             }
         }
-        JUnitRunningModel model = new JUnitRunningModel(root, consoleProperties);
-        return model;
+        return new JUnitRunningModel(root, consoleProperties);
     }
 
     private void processReportsDir(VirtualFile baseDir, TestProxy root, SuiteState suiteState, String reportDir) {
