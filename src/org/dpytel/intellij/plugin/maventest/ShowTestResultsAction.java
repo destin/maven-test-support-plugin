@@ -133,6 +133,7 @@ public class ShowTestResultsAction extends AnAction {
 
     private boolean isVisible(AnActionEvent e) {
         MavenProject mavenProject = MavenActionUtil.getMavenProject(e.getDataContext());
-        return mavenProject != null;
+        VirtualFile selectedFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
+        return mavenProject != null && selectedFile.equals(mavenProject.getDirectoryFile());
     }
 }
