@@ -10,6 +10,11 @@
 
   <change-notes><![CDATA[
       <ul>
+        <li>0.0.6
+            <ul>
+            <li>Show test results action visible only on Maven modules
+            <li>Updated versions in plugin so that newest version description is top
+            </ul>
         <li>0.0.5
             <ul>
             <li>Support for &amp;Jump to source&amp; on test suites and test methods
