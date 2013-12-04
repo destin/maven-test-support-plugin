@@ -10,26 +10,26 @@
 
   <change-notes><![CDATA[
       <ul>
-        <li>0.0.1
+        <li>0.0.5
             <ul>
-            <li>Initial version
-            </ul>
-        <li>0.0.2
-            <ul>
-            <li>Show test results action visible only on maven projects
-            </ul>
-        <li>0.0.3
-            <ul>
-            <li>Added icon for Show test results action
+            <li>Support for &amp;Jump to source&amp; on test suites and test methods
             </ul>
         <li>0.0.4
             <ul>
             <li>Added icon for Show test results tool window
             <li>fixed: 1. New report directories are not recognized without Synchronize
             </ul>
-        <li>0.0.5
+        <li>0.0.3
             <ul>
-            <li>Support for &amp;Jump to source&amp; on test suites and test methods
+            <li>Added icon for Show test results action
+            </ul>
+        <li>0.0.2
+            <ul>
+            <li>Show test results action visible only on maven projects
+            </ul>
+        <li>0.0.1
+            <ul>
+            <li>Initial version
             </ul>
       </ul>
       ]]>
