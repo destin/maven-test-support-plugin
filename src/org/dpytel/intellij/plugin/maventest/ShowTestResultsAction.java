@@ -11,6 +11,7 @@ import com.intellij.execution.junit2.ui.JUnitTreeConsoleView;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.model.RootTestInfo;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
+import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -51,7 +52,8 @@ public class ShowTestResultsAction extends AnAction {
         JUnitConfiguration myConfiguration = new JUnitConfiguration("maven", project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
         final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
-        final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, null, null, null);
+        ExecutionEnvironment environment = new ExecutionEnvironment();
+        final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, environment, null);
         consoleView.initUI();
         VirtualFile selectedFile = event.getData(PlatformDataKeys.VIRTUAL_FILE);
         JUnitRunningModel model = createModel(mavenProject, selectedFile, consoleProperties);
@@ -134,6 +136,7 @@ public class ShowTestResultsAction extends AnAction {
     private boolean isVisible(AnActionEvent e) {
         MavenProject mavenProject = MavenActionUtil.getMavenProject(e.getDataContext());
         VirtualFile selectedFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
-        return mavenProject != null && selectedFile.equals(mavenProject.getDirectoryFile());
+        return mavenProject != null && selectedFile != null
+            && selectedFile.equals(mavenProject.getDirectoryFile());
     }
 }

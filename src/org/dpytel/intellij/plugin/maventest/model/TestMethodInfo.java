@@ -7,6 +7,7 @@ import com.intellij.execution.junit2.info.TestInfo;
 import com.intellij.execution.junit2.segments.ObjectReader;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.*;
+import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.util.MethodSignature;
 import com.intellij.psi.util.MethodSignatureUtil;
 
@@ -39,8 +40,8 @@ public class TestMethodInfo extends TestInfo {
     }
 
     @Override
-    public Location getLocation(Project project) {
-        Location<PsiClass> classLocation = myClass.getLocation(project);
+    public Location getLocation(Project project, GlobalSearchScope searchScope) {
+        Location<PsiClass> classLocation = myClass.getLocation(project, searchScope);
         if (classLocation == null) {
             return null;
         }
