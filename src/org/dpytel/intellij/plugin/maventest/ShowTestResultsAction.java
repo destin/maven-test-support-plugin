@@ -17,6 +17,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
@@ -100,6 +101,7 @@ public class ShowTestResultsAction extends AnAction {
         ContentManager contentManager = toolWindow.getContentManager();
         Content content = contentManager.getFactory()
             .createContent(consoleView.getComponent(), mavenProject.getFinalName(), false);
+        Disposer.register(content, consoleView);
         contentManager.addContent(content);
         contentManager.setSelectedContent(content);
     }
