@@ -7,7 +7,6 @@ import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.states.SuiteState;
-import com.intellij.execution.junit2.ui.JUnitTreeConsoleView;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.model.RootTestInfo;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
@@ -17,6 +16,8 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.ComponentContainer;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.IconLoader;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.openapi.wm.ToolWindow;
@@ -24,6 +25,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
+import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 
@@ -53,7 +55,8 @@ public class ShowTestResultsAction extends AnAction {
         Executor executor = new DefaultRunExecutor();
         final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
         ExecutionEnvironment environment = new ExecutionEnvironment();
-        final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, environment, null);
+        //final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, environment, null);
+        final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null);
         consoleView.initUI();
         VirtualFile selectedFile = event.getData(PlatformDataKeys.VIRTUAL_FILE);
         JUnitRunningModel model = createModel(mavenProject, selectedFile, consoleProperties);
@@ -88,7 +91,7 @@ public class ShowTestResultsAction extends AnAction {
         }
     }
 
-    private void showInToolWindow(Project project, MavenProject mavenProject, JUnitTreeConsoleView consoleView) {
+    private void showInToolWindow(Project project, MavenProject mavenProject, ComponentContainer consoleView) {
         ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(project);
         ToolWindow toolWindow = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
         if (toolWindow == null) {
@@ -100,6 +103,7 @@ public class ShowTestResultsAction extends AnAction {
         ContentManager contentManager = toolWindow.getContentManager();
         Content content = contentManager.getFactory()
             .createContent(consoleView.getComponent(), mavenProject.getFinalName(), false);
+        Disposer.register(content, consoleView);
         contentManager.addContent(content);
         contentManager.setSelectedContent(content);
     }
