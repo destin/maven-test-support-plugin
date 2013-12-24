@@ -1,42 +1,24 @@
 package org.dpytel.intellij.plugin.maventest.view;
 
-import com.intellij.execution.ExecutionBundle;
 import com.intellij.execution.junit2.TestProxy;
-import com.intellij.execution.junit2.ui.Formatters;
 import com.intellij.execution.junit2.ui.JUnitTestTreeView;
 import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
 import com.intellij.execution.junit2.ui.model.JUnitAdapter;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
-import com.intellij.execution.process.ProcessAdapter;
-import com.intellij.execution.process.ProcessEvent;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.testframework.PoolOfTestIcons;
 import com.intellij.execution.testframework.TestTreeView;
 import com.intellij.execution.testframework.ToolbarPanel;
 import com.intellij.execution.testframework.ui.TestResultsPanel;
 import com.intellij.execution.testframework.ui.TestStatusLine;
 import com.intellij.execution.testframework.ui.TestsOutputConsolePrinter;
 import com.intellij.openapi.actionSystem.AnAction;
-import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.application.ModalityState;
 import com.intellij.openapi.progress.util.ColorProgressBar;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
-import com.intellij.ui.SimpleColoredComponent;
-import com.intellij.ui.SimpleTextAttributes;
-import com.intellij.ui.treeStructure.Tree;
-import com.intellij.util.Alarm;
 import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
-import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreeCellRenderer;
-import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -47,11 +29,9 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     private static final String PROPORTION_PROPERTY = "test_tree_console_proprtion";
     private static final float DEFAULT_PROPORTION = 0.2f;
 
-    //private JUnitStatusLine myStatusLine;
     //private StatisticsPanel myStatisticsPanel;
     private TestTreeView myTreeView;
     private TestsOutputConsolePrinter myPrinter;
-    private StartingProgress myStartingProgress;
 
     public MavenTestResultsPanel(final JComponent console,
                                  final TestsOutputConsolePrinter printer,
@@ -64,7 +44,6 @@ public class MavenTestResultsPanel extends TestResultsPanel {
 
     public void initUI() {
         super.initUI();
-        myStartingProgress = new StartingProgress(myTreeView);
     }
 
     protected JComponent createStatisticsPanel() {
@@ -79,8 +58,6 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     }
 
     protected TestStatusLine createStatusLine() {
-        //myStatusLine = new JUnitStatusLine();
-        //return myStatusLine;
         return new TestStatusLine();
     }
 
@@ -89,16 +66,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
         return myTreeView;
     }
 
-    public void onProcessStarted(final ProcessHandler process) {
-        //myStatusLine.onProcessStarted(process);
-        if (myStartingProgress == null) {
-            return;
-        }
-        myStartingProgress.start(process);
-    }
-
     public void setModel(final JUnitRunningModel model) {
-        stopStartingProgress();
         final TestTreeView treeView = model.getTreeView();
         treeView.setLargeModel(true);
         setLeftComponent(treeView);
@@ -132,15 +100,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
         int failed = states[PoolOfTestStates.FAILED_INDEX];
         int errors = states[PoolOfTestStates.ERROR_INDEX];
         int skipped = states[PoolOfTestStates.IGNORED_INDEX];
-        //String.format("Tests run: %d, Failures: %d, Errors: %d, Skipped: %d", total, failed, errors, skipped));
         myStatusLine.setText(TextBundle.getText("maventestsupport.statusline.summary", total, failed, errors, skipped));
-    }
-
-    private void stopStartingProgress() {
-        if (myStartingProgress != null) {
-            myStartingProgress.doStop();
-        }
-        myStartingProgress = null;
     }
 
     public TestTreeView getTreeView() {
@@ -148,101 +108,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     }
 
     public void dispose() {
-        stopStartingProgress();
         myPrinter = null;
     }
 
-    private static class StartingProgress implements Runnable {
-        private final Alarm myAlarm = new Alarm();
-        private final Tree myTree;
-        private final DefaultTreeModel myModel;
-        private final DefaultMutableTreeNode myRootNode = new DefaultMutableTreeNode();
-        private boolean myStarted = false;
-        private boolean myStopped = false;
-        private final SimpleColoredComponent myStartingLabel;
-        private ProcessHandler myProcess;
-        private long myStartedAt = System.currentTimeMillis();
-        private final ProcessAdapter myProcessListener = new ProcessAdapter() {
-            public void processTerminated(ProcessEvent event) {
-                ApplicationManager.getApplication().invokeLater(new Runnable() {
-                    public void run() {
-                        doStop();
-                    }
-                });
-            }
-        };
-
-        public StartingProgress(final Tree tree) {
-            myTree = tree;
-            myModel = new DefaultTreeModel(myRootNode);
-            myTree.setModel(myModel);
-            myStartingLabel = new SimpleColoredComponent();
-            myTree.setPaintBusy(true);
-            //myStartingLabel.setBackground(UIManager.getColor("Tree.background"));
-            myTree.setCellRenderer(new TreeCellRenderer() {
-                public Component getTreeCellRendererComponent(final JTree tree, final Object value,
-                                                              final boolean selected, final boolean expanded,
-                                                              final boolean leaf, final int row,
-                                                              final boolean hasFocus) {
-                    myStartingLabel.clear();
-                    myStartingLabel.setIcon(PoolOfTestIcons.LOADING_ICON);
-                    myStartingLabel.append(getProgressText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-                    if (!myStarted) {
-                        postRepaint();
-                    }
-                    return myStartingLabel;
-                }
-            });
-            myTree.addPropertyChangeListener(JTree.TREE_MODEL_PROPERTY, new PropertyChangeListener() {
-                public void propertyChange(final PropertyChangeEvent evt) {
-                    myTree.removePropertyChangeListener(JTree.TREE_MODEL_PROPERTY, this);
-                    doStop();
-                }
-            });
-        }
-
-        private void doStop() {
-            myStopped = true;
-            myTree.setPaintBusy(false);
-            myModel.nodeChanged(myRootNode);
-            myAlarm.cancelAllRequests();
-            if (myProcess != null) {
-                myProcess.removeProcessListener(myProcessListener);
-            }
-            myProcess = null;
-        }
-
-        public void run() {
-            myModel.nodeChanged(myRootNode);
-            postRepaint();
-        }
-
-        private void postRepaint() {
-            if (myStopped) {
-                return;
-            }
-            myStarted = true;
-            myAlarm.cancelAllRequests();
-            myAlarm.addRequest(this, 300, ModalityState.NON_MODAL);
-        }
-
-        public void start(final ProcessHandler process) {
-            if (process.isProcessTerminated()) {
-                return;
-            }
-            myProcess = process;
-            myStartedAt = System.currentTimeMillis();
-            process.addProcessListener(myProcessListener);
-        }
-
-        private String getProgressText() {
-            if (myStopped) {
-                return ExecutionBundle.message("test.not.started.progress.text");
-            }
-            final long millis = System.currentTimeMillis() - myStartedAt;
-            final String phaseName = myProcess == null ? ExecutionBundle
-                .message("starting.jvm.progress.text") : ExecutionBundle.message("instantiating.tests.progress.text");
-            return phaseName + Formatters.printMinSec(millis);
-        }
-    }
 }

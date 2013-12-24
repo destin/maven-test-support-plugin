@@ -3,7 +3,6 @@ package org.dpytel.intellij.plugin.maventest.view;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.model.TreeCollapser;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
-import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
@@ -32,11 +31,6 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
         myConsolePanel = new MavenTestResultsPanel(getConsole().getComponent(), getPrinter(), myProperties, myEnvironment,
             getConsole().createConsoleActions());
         return myConsolePanel;
-    }
-
-    public void attachToProcess(final ProcessHandler processHandler) {
-        super.attachToProcess(processHandler);
-        myConsolePanel.onProcessStarted(processHandler);
     }
 
     public void dispose() {
