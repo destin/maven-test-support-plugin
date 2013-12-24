@@ -13,7 +13,6 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.PoolOfTestIcons;
-import com.intellij.execution.testframework.Printer;
 import com.intellij.execution.testframework.TestTreeView;
 import com.intellij.execution.testframework.ToolbarPanel;
 import com.intellij.execution.testframework.ui.TestResultsPanel;
@@ -22,10 +21,13 @@ import com.intellij.execution.testframework.ui.TestsOutputConsolePrinter;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.application.ModalityState;
+import com.intellij.openapi.progress.util.ColorProgressBar;
+import com.intellij.rt.execution.junit.states.PoolOfTestStates;
 import com.intellij.ui.SimpleColoredComponent;
 import com.intellij.ui.SimpleTextAttributes;
 import com.intellij.ui.treeStructure.Tree;
 import com.intellij.util.Alarm;
+import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
@@ -35,11 +37,12 @@ import javax.swing.tree.TreeCellRenderer;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 
 /**
  *
  */
-public class MavenTestResultsPanel  extends TestResultsPanel {
+public class MavenTestResultsPanel extends TestResultsPanel {
     @NonNls
     private static final String PROPORTION_PROPERTY = "test_tree_console_proprtion";
     private static final float DEFAULT_PROPORTION = 0.2f;
@@ -51,10 +54,10 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
     private StartingProgress myStartingProgress;
 
     public MavenTestResultsPanel(final JComponent console,
-                        final TestsOutputConsolePrinter printer,
-                        final JUnitConsoleProperties properties,
-                        final ExecutionEnvironment environment,
-                        AnAction[] consoleActions) {
+                                 final TestsOutputConsolePrinter printer,
+                                 final JUnitConsoleProperties properties,
+                                 final ExecutionEnvironment environment,
+                                 AnAction[] consoleActions) {
         super(console, consoleActions, properties, environment, PROPORTION_PROPERTY, DEFAULT_PROPORTION);
         myPrinter = printer;
     }
@@ -88,7 +91,9 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
 
     public void onProcessStarted(final ProcessHandler process) {
         //myStatusLine.onProcessStarted(process);
-        if (myStartingProgress == null) return;
+        if (myStartingProgress == null) {
+            return;
+        }
         myStartingProgress.start(process);
     }
 
@@ -98,28 +103,48 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
         treeView.setLargeModel(true);
         setLeftComponent(treeView);
         myToolbarPanel.setModel(model);
-        //myStatusLine.setModel(model);
-
+        updateStatusLine(model);
         model.addListener(new JUnitAdapter() {
             @Override
             public void onTestSelected(final TestProxy test) {
-                if (myPrinter != null) myPrinter.updateOnTestSelected(test);
+                if (myPrinter != null) {
+                    myPrinter.updateOnTestSelected(test);
+                }
             }
         });
         //myStatisticsPanel.attachTo(model);
     }
 
+    private void updateStatusLine(JUnitRunningModel model) {
+        myStatusLine.setFraction(1);
+        TestProxy modelRoot = model.getRoot();
+        myStatusLine.setStatusColor(modelRoot.isPassed() ? ColorProgressBar.GREEN : ColorProgressBar.RED);
+        ArrayList<TestProxy> allTests = new ArrayList<TestProxy>();
+        modelRoot.collectAllTestsTo(allTests);
+        int[] states = new int[PoolOfTestStates.ERROR_INDEX + 1];
+        int total = 0;
+        for (TestProxy test : allTests) {
+            if (test.isLeaf()) {
+                ++total;
+                states[test.getState().getMagnitude()]++;
+            }
+        }
+        int failed = states[PoolOfTestStates.FAILED_INDEX];
+        int errors = states[PoolOfTestStates.ERROR_INDEX];
+        int skipped = states[PoolOfTestStates.IGNORED_INDEX];
+        //String.format("Tests run: %d, Failures: %d, Errors: %d, Skipped: %d", total, failed, errors, skipped));
+        myStatusLine.setText(TextBundle.getText("maventestsupport.statusline.summary", total, failed, errors, skipped));
+    }
+
     private void stopStartingProgress() {
-        if (myStartingProgress != null) myStartingProgress.doStop();
+        if (myStartingProgress != null) {
+            myStartingProgress.doStop();
+        }
         myStartingProgress = null;
     }
 
     public TestTreeView getTreeView() {
         return myTreeView;
-    }
-
-    public Printer getPrinter() {
-        return myPrinter;
     }
 
     public void dispose() {
@@ -157,11 +182,14 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
             myTree.setCellRenderer(new TreeCellRenderer() {
                 public Component getTreeCellRendererComponent(final JTree tree, final Object value,
                                                               final boolean selected, final boolean expanded,
-                                                              final boolean leaf, final int row, final boolean hasFocus) {
+                                                              final boolean leaf, final int row,
+                                                              final boolean hasFocus) {
                     myStartingLabel.clear();
                     myStartingLabel.setIcon(PoolOfTestIcons.LOADING_ICON);
                     myStartingLabel.append(getProgressText(), SimpleTextAttributes.REGULAR_ATTRIBUTES);
-                    if (!myStarted) postRepaint();
+                    if (!myStarted) {
+                        postRepaint();
+                    }
                     return myStartingLabel;
                 }
             });
@@ -178,7 +206,9 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
             myTree.setPaintBusy(false);
             myModel.nodeChanged(myRootNode);
             myAlarm.cancelAllRequests();
-            if (myProcess != null) myProcess.removeProcessListener(myProcessListener);
+            if (myProcess != null) {
+                myProcess.removeProcessListener(myProcessListener);
+            }
             myProcess = null;
         }
 
@@ -188,23 +218,30 @@ public class MavenTestResultsPanel  extends TestResultsPanel {
         }
 
         private void postRepaint() {
-            if (myStopped) return;
+            if (myStopped) {
+                return;
+            }
             myStarted = true;
             myAlarm.cancelAllRequests();
             myAlarm.addRequest(this, 300, ModalityState.NON_MODAL);
         }
 
         public void start(final ProcessHandler process) {
-            if (process.isProcessTerminated()) return;
+            if (process.isProcessTerminated()) {
+                return;
+            }
             myProcess = process;
             myStartedAt = System.currentTimeMillis();
             process.addProcessListener(myProcessListener);
         }
 
         private String getProgressText() {
-            if (myStopped) return ExecutionBundle.message("test.not.started.progress.text");
+            if (myStopped) {
+                return ExecutionBundle.message("test.not.started.progress.text");
+            }
             final long millis = System.currentTimeMillis() - myStartedAt;
-            final String phaseName = myProcess == null ? ExecutionBundle.message("starting.jvm.progress.text") : ExecutionBundle.message("instantiating.tests.progress.text");
+            final String phaseName = myProcess == null ? ExecutionBundle
+                .message("starting.jvm.progress.text") : ExecutionBundle.message("instantiating.tests.progress.text");
             return phaseName + Formatters.printMinSec(millis);
         }
     }
