@@ -14,12 +14,11 @@ import com.intellij.execution.testframework.ui.TestStatusLine;
 import com.intellij.execution.testframework.ui.TestsOutputConsolePrinter;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.progress.util.ColorProgressBar;
-import com.intellij.rt.execution.junit.states.PoolOfTestStates;
+import org.dpytel.intellij.plugin.maventest.model.TestsSummary;
 import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 import org.jetbrains.annotations.NonNls;
 
 import javax.swing.*;
-import java.util.ArrayList;
 
 /**
  *
@@ -87,20 +86,10 @@ public class MavenTestResultsPanel extends TestResultsPanel {
         myStatusLine.setFraction(1);
         TestProxy modelRoot = model.getRoot();
         myStatusLine.setStatusColor(modelRoot.isPassed() ? ColorProgressBar.GREEN : ColorProgressBar.RED);
-        ArrayList<TestProxy> allTests = new ArrayList<TestProxy>();
-        modelRoot.collectAllTestsTo(allTests);
-        int[] states = new int[PoolOfTestStates.ERROR_INDEX + 1];
-        int total = 0;
-        for (TestProxy test : allTests) {
-            if (test.isLeaf()) {
-                ++total;
-                states[test.getState().getMagnitude()]++;
-            }
-        }
-        int failed = states[PoolOfTestStates.FAILED_INDEX];
-        int errors = states[PoolOfTestStates.ERROR_INDEX];
-        int skipped = states[PoolOfTestStates.IGNORED_INDEX];
-        myStatusLine.setText(TextBundle.getText("maventestsupport.statusline.summary", total, failed, errors, skipped));
+        TestsSummary summary = TestsSummary.createSummary(model);
+        myStatusLine.setText(TextBundle
+            .getText("maventestsupport.statusline.summary", summary.getTotal(), summary.getFailed(),
+                summary.getErrors(), summary.getSkipped()));
     }
 
     public TestTreeView getTreeView() {
