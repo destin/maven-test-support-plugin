@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven tests support plugin</name>
-  <version>0.0.7</version>
+  <version>0.0.8</version>
   <vendor email="support@yourcompany.com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -10,6 +10,10 @@
 
   <change-notes><![CDATA[
       <ul>
+       <li>0.0.8
+            <ul>
+            <li>Rewritten status panel to display summary
+            </ul>
        <li>0.0.7
             <ul>
             <li>Support for IntelliJ IDEA 13
