@@ -6,7 +6,6 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.TestProxy;
-import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.model.RootTestInfo;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
@@ -25,6 +24,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
+import org.dpytel.intellij.plugin.maventest.model.AggregatedState;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
@@ -70,24 +70,24 @@ public class ShowTestResultsAction extends AnAction {
         RootTestInfo rootInfo = new RootTestInfo();
         rootInfo.setName(mavenProject.getMavenId().getArtifactId());
         TestProxy root = new TestProxy(rootInfo);
-        SuiteState suiteState = new SuiteState(root);
+        AggregatedState suiteState = new AggregatedState(root);
         root.setState(suiteState);
         if (baseDir.exists()) {
             baseDir.refresh(false, false);
             VirtualFile target = baseDir.findChild("target");
             if (target != null && target.exists()) {
                 target.refresh(false, false);
-                processReportsDir(target, root, suiteState, "surefire-reports");
-                processReportsDir(target, root, suiteState, "failsafe-reports");
+                processReportsDir(target, root, "surefire-reports");
+                processReportsDir(target, root, "failsafe-reports");
             }
         }
         return new JUnitRunningModel(root, consoleProperties);
     }
 
-    private void processReportsDir(VirtualFile baseDir, TestProxy root, SuiteState suiteState, String reportDir) {
+    private void processReportsDir(VirtualFile baseDir, TestProxy root, String reportDir) {
         VirtualFile reportsDir = baseDir.findFileByRelativePath(reportDir);
         if (reportsDir != null && reportsDir.exists()) {
-            addReports(root, suiteState, reportsDir);
+            addReports(root, reportsDir);
         }
     }
 
@@ -108,13 +108,12 @@ public class ShowTestResultsAction extends AnAction {
         contentManager.setSelectedContent(content);
     }
 
-    private void addReports(TestProxy root, SuiteState suiteState, VirtualFile reportsDir) {
+    private void addReports(TestProxy root, VirtualFile reportsDir) {
         VirtualFile[] children = reportsDir.getChildren();
         for (VirtualFile child : children) {
             if (child.getName().matches("TEST-.*\\.xml")) {
                 TestProxy childTestProxy = reportParser.parseTestSuite(child);
                 root.addChild(childTestProxy);
-                suiteState.updateMagnitude(childTestProxy.getMagnitude());
             }
         }
 

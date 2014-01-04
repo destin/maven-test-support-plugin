@@ -4,10 +4,7 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.states.NotFailedState;
 import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.dpytel.intellij.plugin.maventest.model.FailOrErrorState;
-import org.dpytel.intellij.plugin.maventest.model.SkippedState;
-import org.dpytel.intellij.plugin.maventest.model.TestMethodInfo;
-import org.dpytel.intellij.plugin.maventest.model.TestSuiteInfo;
+import org.dpytel.intellij.plugin.maventest.model.*;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,13 +25,12 @@ public class ReportParser {
             TestProxy testSuite = new TestProxy(new TestSuiteInfo(name.getValue()));
             @SuppressWarnings("unchecked")
             List<Element> testcases = rootElement.getChildren("testcase");
-            SuiteState suiteState = new SuiteState(testSuite);
+            AggregatedState suiteState = new AggregatedState(testSuite);
             testSuite.setState(suiteState);
 
             for (Element testcase : testcases) {
                 TestProxy childTestProxy = parseTestCase(testcase);
                 testSuite.addChild(childTestProxy);
-                suiteState.updateMagnitude(childTestProxy.getMagnitude());
             }
             return testSuite;
         } catch (Exception e) {
