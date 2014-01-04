@@ -53,6 +53,11 @@ public class AggregatedState extends TestState {
         // do nothing
     }
 
+    @Override
+    public void changeStateAfterAddingChildTo(TestProxy test, TestProxy child) {
+        // do nothing
+    }
+
     private void updateMagnitude(int magnitude) {
         if (myMagnitude == PoolOfTestStates.NOT_RUN_INDEX) {
             myMagnitude = magnitude;

@@ -16,25 +16,25 @@ import static org.junit.Assert.assertThat;
 public class AggregatedStateTest {
 
     private AggregatedState state;
-    private TestProxy test;
+    private TestProxy rootTest;
 
     @Before
     public void setUp() throws Exception {
-        test = new TestProxy(new RootTestInfo());
-        state = new AggregatedState(test);
-        test.setState(state);
+        rootTest = new TestProxy(new RootTestInfo());
+        state = new AggregatedState(rootTest);
+        rootTest.setState(state);
     }
 
     @Test
     public void noChildren() throws Exception {
-        assertThat(state.getMagnitude(), is(PoolOfTestStates.NOT_RUN_INDEX));
+        assertMagnitudeIs(PoolOfTestStates.NOT_RUN_INDEX);
     }
 
     @Test
     public void oneTestPassed() throws Exception {
         addPassedTest();
 
-        assertThat(state.getMagnitude(), is(PoolOfTestStates.PASSED_INDEX));
+        assertMagnitudeIs(PoolOfTestStates.PASSED_INDEX);
     }
 
     @Test
@@ -42,7 +42,7 @@ public class AggregatedStateTest {
         addPassedTest();
         addFailedTest();
 
-        assertThat(state.getMagnitude(), is(PoolOfTestStates.FAILED_INDEX));
+        assertMagnitudeIs(PoolOfTestStates.FAILED_INDEX);
     }
 
     @Test
@@ -50,18 +50,22 @@ public class AggregatedStateTest {
         addPassedTest();
         addFailedTest();
 
-        assertThat(state.getMagnitude(), is(PoolOfTestStates.FAILED_INDEX));
+        assertMagnitudeIs(PoolOfTestStates.FAILED_INDEX);
+    }
+
+    private void assertMagnitudeIs(int magnitude) {
+        assertThat(rootTest.getState().getMagnitude(), is(magnitude));
     }
 
     private void addFailedTest() {
         TestProxy passedChild = new TestProxy(new TestMethodInfo("org.dpytel.Test", "failed"));
         passedChild.setState(FailOrErrorState.createFailedState("stacktrace"));
-        test.addChild(passedChild);
+        rootTest.addChild(passedChild);
     }
 
     private void addPassedTest() {
         TestProxy passedChild = new TestProxy(new TestMethodInfo("org.dpytel.Test", "passed"));
         passedChild.setState(NotFailedState.createPassed());
-        test.addChild(passedChild);
+        rootTest.addChild(passedChild);
     }
 }
