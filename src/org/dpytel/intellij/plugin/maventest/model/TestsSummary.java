@@ -33,7 +33,7 @@ public class TestsSummary {
         int[] states = new int[PoolOfTestStates.ERROR_INDEX + 1];
         total = 0;
         for (TestProxy test : allTests) {
-            if (test.isLeaf()) {
+            if (test.isLeaf() && test != modelRoot) {
                 ++total;
                 states[test.getState().getMagnitude()]++;
             }

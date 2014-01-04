@@ -13,11 +13,14 @@ import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 
 /**
  *
  */
 public class TestsSummaryTest {
+
+    private JUnitConsoleProperties properties = mock(JUnitConsoleProperties.class);
 
     @Before
     public void setUp() throws Exception {
@@ -29,7 +32,6 @@ public class TestsSummaryTest {
         PlatformUltraLiteTestFixture.getFixture().tearDown();
     }
 
-    @Ignore("No mocking library")
     @Test
     public void testNoTests() throws Exception {
         RootTestInfo rootInfo = new RootTestInfo();
@@ -37,7 +39,6 @@ public class TestsSummaryTest {
         TestProxy root = new TestProxy(rootInfo);
         SuiteState suiteState = new SuiteState(root);
         root.setState(suiteState);
-        JUnitConsoleProperties properties = null; // TODO need to mock it but no mocking lib is available
         JUnitRunningModel model = new JUnitRunningModel(root, properties);
 
         TestsSummary summary = TestsSummary.createSummary(model);
