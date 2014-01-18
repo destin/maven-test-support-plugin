@@ -7,7 +7,6 @@ import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
-import com.intellij.execution.junit2.ui.model.RootTestInfo;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.actionSystem.AnAction;
@@ -24,7 +23,7 @@ import com.intellij.openapi.wm.ToolWindowAnchor;
 import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
-import org.dpytel.intellij.plugin.maventest.model.AggregatedState;
+import org.dpytel.intellij.plugin.maventest.model.RootTestBuilder;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
@@ -67,11 +66,7 @@ public class ShowTestResultsAction extends AnAction {
 
     private JUnitRunningModel createModel(MavenProject mavenProject, VirtualFile baseDir,
                                           JUnitConsoleProperties consoleProperties) {
-        RootTestInfo rootInfo = new RootTestInfo();
-        rootInfo.setName(mavenProject.getMavenId().getArtifactId());
-        TestProxy root = new TestProxy(rootInfo);
-        AggregatedState suiteState = new AggregatedState(root);
-        root.setState(suiteState);
+        TestProxy root = RootTestBuilder.named(mavenProject.getMavenId().getArtifactId()).build();
         if (baseDir.exists()) {
             baseDir.refresh(false, false);
             VirtualFile target = baseDir.findChild("target");
