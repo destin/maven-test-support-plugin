@@ -2,7 +2,7 @@
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven tests support plugin</name>
   <version>0.0.9</version>
-  <vendor email="pytel(dot)dawid[at]gmail<dot>com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
+  <vendor email="pytel(dot)dawid[at]gmail/dot/com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
   <description><![CDATA[
       Maven tests support plugin.<br>
