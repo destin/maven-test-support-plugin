@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven tests support plugin</name>
-  <version>0.0.9</version>
+  <version>0.0.10</version>
   <vendor email="pytel(dot)dawid[at]gmail/dot/com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -10,6 +10,10 @@
 
   <change-notes><![CDATA[
       <ul>
+       <li>0.0.10
+            <ul>
+            <li>Improved test result file handling to avoid caching and resource leaks
+            </ul>
        <li>0.0.9
             <ul>
             <li>Status panel now correctly displays total number 0 when no test results were found
