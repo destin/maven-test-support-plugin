@@ -2,7 +2,6 @@ package org.dpytel.intellij.plugin.maventest;
 
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.states.NotFailedState;
-import com.intellij.execution.junit2.states.SuiteState;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.dpytel.intellij.plugin.maventest.model.*;
 import org.jdom.Attribute;
@@ -10,6 +9,9 @@ import org.jdom.Document;
 import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 
 public class ReportParser {
@@ -17,9 +19,12 @@ public class ReportParser {
     }
 
     public TestProxy parseTestSuite(VirtualFile child) {
+        SAXBuilder builder = new SAXBuilder();
+        File file = new File(child.getCanonicalPath());
+        FileInputStream in = null;
         try {
-            SAXBuilder builder = new SAXBuilder();
-            Document document = builder.build(child.getInputStream());
+            in = new FileInputStream(file);
+            Document document = builder.build(in);
             Element rootElement = document.getRootElement();
             Attribute name = rootElement.getAttribute("name");
             TestProxy testSuite = new TestProxy(new TestSuiteInfo(name.getValue()));
@@ -35,6 +40,14 @@ public class ReportParser {
             return testSuite;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if (in != null) {
+                try {
+                    in.close();
+                } catch (IOException e) {
+                    // ignore
+                }
+            }
         }
     }
 
