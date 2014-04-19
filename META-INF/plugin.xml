@@ -1,11 +1,18 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
-  <name>Maven tests support plugin</name>
+  <name>Maven Tests Support Plugin</name>
   <version>0.0.10</version>
   <vendor email="pytel(dot)dawid[at]gmail/dot/com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
   <description><![CDATA[
-      Maven tests support plugin.<br>
+      <p>This plugin is intended to help developers work with tests in maven projects.</p>
+      <p>Currently the following features are available:
+      <ul>
+        <li>Displaying Surefire and Failsafe test results</li>
+        <li>Navigating from test results view to specific tests</li>
+      </ul>
+      <br/>
+      </p>
       ]]></description>
 
   <change-notes><![CDATA[
