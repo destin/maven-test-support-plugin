@@ -1,4 +1,13 @@
-IntelliJ IDEA plugin that provides support for tests executed from maven projects.
+This IntelliJ IDEA plugin is intended to simplify work with automated tests in Maven projects.
 
 Current features:
-  - Project action "Show Test Results" that shows results of surefire and failsafe tests
+* Action "Show Test Results" that shows results of Surefire and Failsafe tests
+
+# Show Test Results action
+Show Test Results window looks like IntelliJ's Junit test results panel.
+
+In order to view test results for maven module:
+1. right click the module
+2. choose Show Test Results action
+
+The plugin looks for target/surefire-reports and target/failsafe-reports directories where test results are stored.

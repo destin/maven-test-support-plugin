@@ -1,6 +1,6 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
-  <name>Maven Tests Support Plugin</name>
+  <name>Maven Test Support Plugin</name>
   <version>0.0.10</version>
   <vendor email="pytel(dot)dawid[at]gmail/dot/com" url="https://github.com/destin/maven-test-support-plugin">Dawid Pytel</vendor>
 
