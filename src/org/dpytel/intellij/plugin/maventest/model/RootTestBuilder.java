@@ -17,26 +17,25 @@
 package org.dpytel.intellij.plugin.maventest.model;
 
 import com.intellij.execution.junit2.TestProxy;
-import com.intellij.execution.junit2.ui.model.RootTestInfo;
+import org.jetbrains.idea.maven.project.MavenProject;
 
 /**
  *
  */
 public class RootTestBuilder {
 
-    private final String name;
+    private final MavenProject mavenProject;
 
-    public RootTestBuilder(String name) {
-        this.name = name;
+    public RootTestBuilder(MavenProject mavenProject) {
+        this.mavenProject = mavenProject;
     }
 
-    public static RootTestBuilder named(String name) {
-        return new RootTestBuilder(name);
+    public static RootTestBuilder fromMavenProject(MavenProject mavenProject) {
+        return new RootTestBuilder(mavenProject);
     }
 
     public TestProxy build() {
-        RootTestInfo rootInfo = new RootTestInfo();
-        rootInfo.setName(name);
+        MavenRootTestInfo rootInfo = new MavenRootTestInfo(mavenProject);
         TestProxy root = new TestProxy(rootInfo);
         AggregatedState suiteState = new AggregatedState(root);
         root.setState(suiteState);

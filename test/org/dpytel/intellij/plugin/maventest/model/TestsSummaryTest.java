@@ -20,7 +20,9 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.states.NotFailedState;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
+import com.intellij.mock.MockVirtualFile;
 import com.intellij.testFramework.PlatformUltraLiteTestFixture;
+import org.jetbrains.idea.maven.project.MavenProject;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -183,7 +185,7 @@ public class TestsSummaryTest {
         }
 
         public JUnitRunningModel build() {
-            TestProxy root = RootTestBuilder.named("Root").build();
+            TestProxy root = RootTestBuilder.fromMavenProject(new MavenProject(new MockVirtualFile("."))).build();
             for (TestProxy suite : suites) {
                 root.addChild(suite);
             }

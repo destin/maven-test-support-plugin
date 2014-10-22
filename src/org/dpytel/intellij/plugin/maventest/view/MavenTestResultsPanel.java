@@ -18,7 +18,6 @@ package org.dpytel.intellij.plugin.maventest.view;
 
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.JUnitTestTreeView;
-import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
 import com.intellij.execution.junit2.ui.model.JUnitAdapter;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
@@ -47,18 +46,24 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     //private StatisticsPanel myStatisticsPanel;
     private TestTreeView myTreeView;
     private TestsOutputConsolePrinter myPrinter;
+    private final MavenTreeConsoleView consoleView;
 
     public MavenTestResultsPanel(final JComponent console,
                                  final TestsOutputConsolePrinter printer,
                                  final JUnitConsoleProperties properties,
                                  final ExecutionEnvironment environment,
-                                 AnAction[] consoleActions) {
+                                 final AnAction[] consoleActions, final MavenTreeConsoleView consoleView) {
         super(console, consoleActions, properties, environment, PROPORTION_PROPERTY, DEFAULT_PROPORTION);
         myPrinter = printer;
+        this.consoleView = consoleView;
     }
 
     public void initUI() {
         super.initUI();
+    }
+
+    public MavenTreeConsoleView getConsoleView() {
+        return consoleView;
     }
 
     protected JComponent createStatisticsPanel() {
@@ -69,7 +74,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     }
 
     protected ToolbarPanel createToolbarPanel() {
-        return new JUnitToolbarPanel(myProperties, myEnvironment, this);
+        return new MavenToolbarPanel(myProperties, myEnvironment, this);
     }
 
     protected TestStatusLine createStatusLine() {

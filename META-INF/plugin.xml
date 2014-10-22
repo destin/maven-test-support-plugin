@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.10</version>
+  <version>0.0.11</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,10 @@
 
   <change-notes><![CDATA[
       <ul>
+       <li>0.0.11
+            <ul>
+            <li>Added Refresh button to Test results view.
+            </ul>
        <li>0.0.10
             <ul>
             <li>Improved test result file handling to avoid caching and resource leaks

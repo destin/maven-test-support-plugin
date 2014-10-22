@@ -28,7 +28,7 @@ import org.jetbrains.annotations.NotNull;
 import javax.swing.*;
 
 /**
- *
+ * Represents view (i.e. single tab in Tool Window) that displays test results, console output, all the buttons.
  */
 public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
     private MavenTestResultsPanel myConsolePanel;
@@ -45,10 +45,11 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
 
     protected TestResultsPanel createTestResultsPanel() {
         myConsolePanel = new MavenTestResultsPanel(getConsole().getComponent(), getPrinter(), myProperties, myEnvironment,
-            getConsole().createConsoleActions());
+            getConsole().createConsoleActions(), this);
         return myConsolePanel;
     }
 
+    @Override
     public void dispose() {
         super.dispose();
         myConsolePanel = null;
