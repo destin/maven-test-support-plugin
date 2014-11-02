@@ -29,11 +29,18 @@ import org.jetbrains.idea.maven.project.MavenProject;
 public class ModelCreator {
 
     private final ReportParser reportParser = new ReportParser();
+    private final MavenProject mavenProject;
+    private final JUnitConsoleProperties consoleProperties;
 
-    public JUnitRunningModel createModel(MavenProject mavenProject, VirtualFile baseDir,
-                                          JUnitConsoleProperties consoleProperties) {
-        TestProxy root = RootTestBuilder.fromMavenProject(mavenProject).build();
-        addChildResults(baseDir, root);
+    public ModelCreator(MavenProject mavenProject,
+                        JUnitConsoleProperties consoleProperties) {
+        this.mavenProject = mavenProject;
+        this.consoleProperties = consoleProperties;
+    }
+
+    public JUnitRunningModel createModel() {
+        TestProxy root = RootTestBuilder.fromMavenProject(this.mavenProject).build();
+        addChildResults(mavenProject.getDirectoryFile(), root);
         return new JUnitRunningModel(root, consoleProperties);
     }
 
@@ -50,7 +57,7 @@ public class ModelCreator {
     }
 
     private void processReportsDir(VirtualFile baseDir, TestProxy root, String reportDir) {
-        VirtualFile reportsDir = baseDir.findFileByRelativePath(reportDir);
+        VirtualFile reportsDir = baseDir.findChild(reportDir);
         if (reportsDir != null && reportsDir.exists()) {
             addReports(root, reportsDir);
         }

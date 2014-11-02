@@ -16,11 +16,6 @@
 
 package org.dpytel.intellij.plugin.maventest;
 
-import com.intellij.execution.Executor;
-import com.intellij.execution.configurations.ConfigurationFactory;
-import com.intellij.execution.executors.DefaultRunExecutor;
-import com.intellij.execution.junit.JUnitConfiguration;
-import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -50,8 +45,6 @@ public class ShowTestResultsAction extends AnAction {
     public static final String TOOL_WINDOW_ID = "Maven test results";
     private static final String TOOL_WINDOW_ICON = "/icons/showResultsToolWindow.png";
 
-    final static ModelCreator myModelCreator = new ModelCreator();
-
     public ShowTestResultsAction() {
         super("ShowTestResultsAction");
     }
@@ -60,20 +53,15 @@ public class ShowTestResultsAction extends AnAction {
     public void actionPerformed(AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         MavenProject mavenProject = MavenActionUtil.getMavenProject(event.getDataContext());
-        JUnitConfigurationType jUnitConfigurationType = JUnitConfigurationType.getInstance();
-        if (jUnitConfigurationType == null) {
+        final JUnitConsoleProperties consoleProperties = JUnitApiUtils.createConsoleProperties(project);
+        if (consoleProperties == null) {
             return;
         }
-        ConfigurationFactory configurationFactory = jUnitConfigurationType.getConfigurationFactories()[0];
-        JUnitConfiguration myConfiguration = new JUnitConfiguration("maven", project, configurationFactory);
-        Executor executor = new DefaultRunExecutor();
-        final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
         ExecutionEnvironment environment = new ExecutionEnvironment();
-        //final JUnitTreeConsoleView consoleView = new JUnitTreeConsoleView(consoleProperties, environment, null);
         final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null);
         consoleView.initUI();
-        VirtualFile selectedFile = event.getData(PlatformDataKeys.VIRTUAL_FILE);
-        JUnitRunningModel model = myModelCreator.createModel(mavenProject, selectedFile, consoleProperties);
+        ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties);
+        JUnitRunningModel model = modelCreator.createModel();
         consoleView.attachToModel(model);
 
         showInToolWindow(project, mavenProject, consoleView);
@@ -94,11 +82,6 @@ public class ShowTestResultsAction extends AnAction {
         Disposer.register(content, consoleView);
         contentManager.addContent(content);
         contentManager.setSelectedContent(content);
-    }
-
-    @Override
-    public boolean isInInjectedContext() {
-        return super.isInInjectedContext();
     }
 
     @Override

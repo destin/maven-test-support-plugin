@@ -37,8 +37,6 @@ public class RefreshViewAction extends DumbAwareAction {
     private final MavenTreeConsoleView consoleView;
     private TestFrameworkRunningModel model;
 
-    private ModelCreator modelCreator = new ModelCreator();
-
     public RefreshViewAction(MavenTreeConsoleView consoleView) {
         super(TextBundle
             .getText("maventestsupport.toolbar.actions.refresh.name"), TextBundle
@@ -53,8 +51,8 @@ public class RefreshViewAction extends DumbAwareAction {
         MavenRootTestInfo rootTestInfo = (MavenRootTestInfo) info;
         MavenProject mavenProject = rootTestInfo.getMavenProject();
         JUnitConsoleProperties jUnitConsoleProperties = (JUnitConsoleProperties) model.getProperties();
-        JUnitRunningModel newModel = modelCreator.createModel(mavenProject, mavenProject.getDirectoryFile(),
-            jUnitConsoleProperties);
+        ModelCreator modelCreator = new ModelCreator(mavenProject, jUnitConsoleProperties);
+        JUnitRunningModel newModel = modelCreator.createModel();
         consoleView.attachToModel(newModel);
     }
 
