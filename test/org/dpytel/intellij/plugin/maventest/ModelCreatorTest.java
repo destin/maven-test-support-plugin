@@ -20,6 +20,7 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.mock.MockVirtualFile;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
 import com.intellij.testFramework.PlatformUltraLiteTestFixture;
 import org.junit.After;
@@ -35,6 +36,7 @@ public class ModelCreatorTest {
     private final JUnitConsoleProperties consoleProperties = mock(JUnitConsoleProperties.class);
     private PlatformUltraLiteTestFixture platformFixture;
     private MockMavenModuleBuilder builder;
+    private JUnitRunningModel model;
 
     @Before
     public void setUp() throws Exception {
@@ -45,12 +47,15 @@ public class ModelCreatorTest {
 
     @After
     public void tearDown() throws Exception {
+        if (model != null) {
+            Disposer.dispose(model);
+        }
         platformFixture.tearDown();
     }
 
     @Test
     public void noTargetDir() throws Exception {
-        JUnitRunningModel model = createModel();
+        model = createModel();
 
         assertNoTestsRun(model);
     }
@@ -58,7 +63,7 @@ public class ModelCreatorTest {
     @Test
     public void emptyTargetDir() throws Exception {
         builder.addDir("target");
-        JUnitRunningModel model = createModel();
+        model = createModel();
 
         assertNoTestsRun(model);
     }
@@ -67,7 +72,7 @@ public class ModelCreatorTest {
     public void emptySurefireDir() throws Exception {
         MockVirtualFile target = builder.addDir("target");
         target.addChild(new MockVirtualFile(true, "surefire-reports"));
-        JUnitRunningModel model = createModel();
+        model = createModel();
 
         assertNoTestsRun(model);
     }

@@ -20,11 +20,11 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
 import com.intellij.testFramework.ModuleTestCase;
 import org.jetbrains.idea.maven.project.MavenProject;
-import org.junit.Test;
 
 import java.io.File;
 import java.util.List;
@@ -38,6 +38,7 @@ import static org.junit.Assert.assertThat;
 public class ModelCreatorIT extends ModuleTestCase {
 
     private JUnitConsoleProperties consoleProperties;
+    private JUnitRunningModel model;
 
     @Override
     public void setUp() throws Exception {
@@ -45,12 +46,17 @@ public class ModelCreatorIT extends ModuleTestCase {
         consoleProperties = JUnitApiUtils.createConsoleProperties(getProject());
     }
 
-    @Test
+    @Override
+    public void tearDown() throws Exception {
+        Disposer.dispose(model);
+        super.tearDown();
+    }
+
     public void testAllKindsOfResults() throws Exception {
         MavenProject mavenProject = loadMavenModule("submodule");
         ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties);
 
-        JUnitRunningModel model = modelCreator.createModel();
+        model = modelCreator.createModel();
 
         TestProxy root = model.getRoot();
         assertIsError(root);
@@ -98,7 +104,7 @@ public class ModelCreatorIT extends ModuleTestCase {
         List<TestProxy> children = parent.getChildren();
         for (TestProxy proxy : children) {
             String name = proxy.toString();
-            if (name != null && name.equals(proxyName)) {
+            if (name.equals(proxyName)) {
                 return proxy;
             }
         }

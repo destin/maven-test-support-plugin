@@ -21,6 +21,7 @@ import com.intellij.execution.junit2.states.NotFailedState;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.mock.MockVirtualFile;
+import com.intellij.openapi.util.Disposer;
 import com.intellij.testFramework.PlatformUltraLiteTestFixture;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.junit.After;
@@ -39,6 +40,8 @@ import static org.mockito.Mockito.mock;
  */
 public class TestsSummaryTest {
 
+    private JUnitRunningModel model;
+
     @Before
     public void setUp() throws Exception {
         PlatformUltraLiteTestFixture.getFixture().setUp();
@@ -46,12 +49,15 @@ public class TestsSummaryTest {
 
     @After
     public void tearDown() throws Exception {
+        if (model != null) {
+            Disposer.dispose(model);
+        }
         PlatformUltraLiteTestFixture.getFixture().tearDown();
     }
 
     @Test
     public void testNoTests() throws Exception {
-        JUnitRunningModel model = ModelBuilder.newModel().build();
+        model = ModelBuilder.newModel().build();
 
         TestsSummary summary = TestsSummary.createSummary(model);
 
@@ -64,7 +70,7 @@ public class TestsSummaryTest {
     @Test
     public void testOneTestPassed() throws Exception {
         TestProxy methodTest = createPassedTest();
-        JUnitRunningModel model = ModelBuilder
+        model = ModelBuilder
             .newModel()
             .withSuite("org.dpytel.SingleErrorTestSuite", methodTest)
             .build();
@@ -80,7 +86,7 @@ public class TestsSummaryTest {
     @Test
     public void testOneTestError() throws Exception {
         TestProxy methodTest = createErrorTest();
-        JUnitRunningModel model = ModelBuilder
+        model = ModelBuilder
             .newModel()
             .withSuite("org.dpytel.SingleFailingTestSuite", methodTest)
             .build();
@@ -96,7 +102,7 @@ public class TestsSummaryTest {
     @Test
     public void testOneTestFail() throws Exception {
         TestProxy methodTest = createFailedTest();
-        JUnitRunningModel model = ModelBuilder
+        model = ModelBuilder
             .newModel()
             .withSuite("org.dpytel.SinglePassingTestSuite", methodTest)
             .build();
@@ -112,7 +118,7 @@ public class TestsSummaryTest {
     @Test
     public void testOneTestSkipped() throws Exception {
         TestProxy methodTest = createSkippedTest();
-        JUnitRunningModel model = ModelBuilder
+        model = ModelBuilder
             .newModel()
             .withSuite("org.dpytel.SingleSkippedTestSuite", methodTest)
             .build();
@@ -129,7 +135,7 @@ public class TestsSummaryTest {
     public void testTwoSuccessfulTests() throws Exception {
         TestProxy methodTest1 = createPassedTest();
         TestProxy methodTest2 = createPassedTest();
-        JUnitRunningModel model = ModelBuilder
+        model = ModelBuilder
             .newModel()
             .withSuite("org.dpytel.SingleSkippedTestSuite", methodTest1, methodTest2)
             .build();
