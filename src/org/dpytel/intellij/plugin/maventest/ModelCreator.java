@@ -19,18 +19,25 @@ package org.dpytel.intellij.plugin.maventest;
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.dpytel.intellij.plugin.maventest.model.RootTestBuilder;
+import org.jdom.JDOMException;
 import org.jetbrains.idea.maven.project.MavenProject;
+
+import java.io.IOException;
 
 /**
  *
  */
 public class ModelCreator {
 
+    public static final String RESULTS_FILE_PATTERN = "TEST-.*\\.xml";
     private final ReportParser reportParser = new ReportParser();
     private final MavenProject mavenProject;
     private final JUnitConsoleProperties consoleProperties;
+
+    private final static Logger LOGGER = Logger.getInstance(ModelCreator.class);
 
     public ModelCreator(MavenProject mavenProject,
                         JUnitConsoleProperties consoleProperties) {
@@ -66,11 +73,24 @@ public class ModelCreator {
     private void addReports(TestProxy root, VirtualFile reportsDir) {
         VirtualFile[] children = reportsDir.getChildren();
         for (VirtualFile child : children) {
-            if (child.getName().matches("TEST-.*\\.xml")) {
-                TestProxy childTestProxy = reportParser.parseTestSuite(child);
-                root.addChild(childTestProxy);
+            if (isValidResultsFile(child)) {
+                parseAndAddToRoot(root, child);
             }
         }
+    }
 
+    private boolean isValidResultsFile(VirtualFile child) {
+        return child.getName().matches(RESULTS_FILE_PATTERN) && child.exists() && child.getCanonicalPath() != null;
+    }
+
+    private void parseAndAddToRoot(TestProxy root, VirtualFile child) {
+        try {
+            TestProxy childTestProxy = reportParser.parseTestSuite(child);
+            root.addChild(childTestProxy);
+        } catch (IOException e) {
+            LOGGER.error("Cannot open file: " + child.getCanonicalPath(), e);
+        } catch (JDOMException e) {
+            LOGGER.error("Cannot parse file: " + child.getCanonicalPath(), e);
+        }
     }
 }

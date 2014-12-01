@@ -23,6 +23,7 @@ import org.dpytel.intellij.plugin.maventest.model.*;
 import org.jdom.Attribute;
 import org.jdom.Document;
 import org.jdom.Element;
+import org.jdom.JDOMException;
 import org.jdom.input.SAXBuilder;
 
 import java.io.File;
@@ -34,7 +35,7 @@ public class ReportParser {
     public ReportParser() {
     }
 
-    public TestProxy parseTestSuite(VirtualFile child) {
+    public TestProxy parseTestSuite(VirtualFile child) throws IOException, JDOMException {
         SAXBuilder builder = new SAXBuilder();
         File file = new File(child.getCanonicalPath());
         FileInputStream in = null;
@@ -54,8 +55,6 @@ public class ReportParser {
                 testSuite.addChild(childTestProxy);
             }
             return testSuite;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         } finally {
             if (in != null) {
                 try {
