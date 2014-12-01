@@ -88,6 +88,8 @@
   <actions>
       <group id="MavenTest.MenuGroup" text="_Maven Tests" description="Maven Tests">
           <add-to-group group-id="ProjectViewPopupMenu" anchor="last"  />
+          <add-to-group group-id="Maven.NavigatorActionsToolbar" anchor="last" />
+          <add-to-group group-id="Maven.BaseProjectMenu" anchor="last" />
           <action id="MavenTest.ShowTestResults"
                   class="org.dpytel.intellij.plugin.maventest.ShowTestResultsAction"
                   text="Show Test Results"

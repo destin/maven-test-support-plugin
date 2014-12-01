@@ -21,6 +21,7 @@ import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
+import com.intellij.openapi.actionSystem.DataContext;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.actionSystem.Presentation;
 import com.intellij.openapi.project.Project;
@@ -34,6 +35,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
 
@@ -50,7 +52,7 @@ public class ShowTestResultsAction extends AnAction {
     }
 
     @Override
-    public void actionPerformed(AnActionEvent event) {
+    public void actionPerformed(@NotNull AnActionEvent event) {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         MavenProject mavenProject = MavenActionUtil.getMavenProject(event.getDataContext());
         final JUnitConsoleProperties consoleProperties = JUnitApiUtils.createConsoleProperties(project);
@@ -85,7 +87,7 @@ public class ShowTestResultsAction extends AnAction {
     }
 
     @Override
-    public void update(AnActionEvent e) {
+    public void update(@NotNull AnActionEvent e) {
         super.update(e);
         Presentation p = e.getPresentation();
         p.setEnabled(isAvailable(e));
@@ -93,13 +95,21 @@ public class ShowTestResultsAction extends AnAction {
     }
 
     private boolean isAvailable(AnActionEvent e) {
-        return MavenActionUtil.hasProject(e.getDataContext());
+        return isMavenModuleSelected(e);
     }
 
     private boolean isVisible(AnActionEvent e) {
-        MavenProject mavenProject = MavenActionUtil.getMavenProject(e.getDataContext());
+        return isMavenModuleSelected(e);
+    }
+
+    private boolean isMavenModuleSelected(AnActionEvent e) {
+        DataContext dataContext = e.getDataContext();
+        if (!MavenActionUtil.hasProject(dataContext)) {
+            return false;
+        }
+        MavenProject mavenProject = MavenActionUtil.getMavenProject(dataContext);
         VirtualFile selectedFile = e.getData(PlatformDataKeys.VIRTUAL_FILE);
         return mavenProject != null && selectedFile != null
-            && selectedFile.equals(mavenProject.getDirectoryFile());
+            && (selectedFile.equals(mavenProject.getDirectoryFile()) || selectedFile.equals(mavenProject.getFile()));
     }
 }
