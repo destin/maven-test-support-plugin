@@ -21,7 +21,9 @@ import com.intellij.execution.junit2.TestProxyListener;
 import com.intellij.execution.junit2.states.TestState;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.Printer;
+import com.intellij.execution.ui.ConsoleViewContentType;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
+import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 
 /**
  *
@@ -32,12 +34,15 @@ public class AggregatedState extends TestState {
 
     private int myMagnitude = PoolOfTestStates.SKIPPED_INDEX;
 
+    private boolean hasChildren = false;
+
     public AggregatedState(TestProxy test) {
         this.myTest = test;
         this.myTest.addListener(new TestProxyListener() {
             @Override
             public void onChildAdded(AbstractTestProxy parent, AbstractTestProxy newChild) {
                 if (newChild.getParent() == myTest) {
+                    hasChildren = true;
                     updateMagnitude(newChild.getMagnitude());
                 }
             }
@@ -66,13 +71,17 @@ public class AggregatedState extends TestState {
 
     @Override
     public void printOn(Printer printer) {
-        // do nothing
+        if (!hasChildren) {
+            printer.print(TextBundle.getText("maventestsupport.tests.noresults"), ConsoleViewContentType.ERROR_OUTPUT);
+        }
     }
 
     @Override
     public void changeStateAfterAddingChildTo(TestProxy test, TestProxy child) {
         // do nothing
     }
+
+
 
     private void updateMagnitude(int magnitude) {
         if (myMagnitude == PoolOfTestStates.NOT_RUN_INDEX) {
