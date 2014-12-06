@@ -43,7 +43,7 @@ public class AggregatedStateTest {
 
     @Test
     public void noChildren() throws Exception {
-        assertMagnitudeIs(PoolOfTestStates.NOT_RUN_INDEX);
+        assertMagnitudeIs(PoolOfTestStates.SKIPPED_INDEX);
     }
 
     @Test

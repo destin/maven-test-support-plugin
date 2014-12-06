@@ -30,7 +30,7 @@ public class AggregatedState extends TestState {
 
     private final TestProxy myTest;
 
-    private int myMagnitude = PoolOfTestStates.NOT_RUN_INDEX;
+    private int myMagnitude = PoolOfTestStates.SKIPPED_INDEX;
 
     public AggregatedState(TestProxy test) {
         this.myTest = test;

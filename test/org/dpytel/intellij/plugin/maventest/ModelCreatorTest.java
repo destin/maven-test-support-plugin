@@ -85,7 +85,7 @@ public class ModelCreatorTest {
     private void assertNoTestsRun(JUnitRunningModel model) {
         TestProxy root = model.getRoot();
         assertThat(root.getChildCount(), is(0));
-        assertThat(root.getMagnitude(), is(PoolOfTestStates.NOT_RUN_INDEX));
+        assertThat(root.getMagnitude(), is(PoolOfTestStates.SKIPPED_INDEX));
     }
 
 }
