@@ -18,15 +18,17 @@ package org.dpytel.intellij.plugin.maventest;
 
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.info.TestInfo;
-import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.testframework.TestFrameworkRunningModel;
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.project.DumbAwareAction;
+import com.intellij.openapi.project.Project;
 import org.dpytel.intellij.plugin.maventest.model.MavenRootTestInfo;
 import org.dpytel.intellij.plugin.maventest.text.TextBundle;
+import org.dpytel.intellij.plugin.maventest.toolwindow.MavenToolWindow;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 
 /**
@@ -45,15 +47,15 @@ public class RefreshViewAction extends DumbAwareAction {
     }
 
     @Override
-    public void actionPerformed(AnActionEvent e) {
+    public void actionPerformed(@NotNull AnActionEvent e) {
         TestProxy root = (TestProxy) model.getRoot();
         TestInfo info = root.getInfo();
         MavenRootTestInfo rootTestInfo = (MavenRootTestInfo) info;
         MavenProject mavenProject = rootTestInfo.getMavenProject();
         JUnitConsoleProperties jUnitConsoleProperties = (JUnitConsoleProperties) model.getProperties();
-        ModelCreator modelCreator = new ModelCreator(mavenProject, jUnitConsoleProperties);
-        JUnitRunningModel newModel = modelCreator.createModel();
-        consoleView.attachToModel(newModel);
+        Project project = jUnitConsoleProperties.getProject();
+        MavenToolWindow window = new MavenToolWindow(project);
+        window.refreshTab(consoleView, mavenProject, jUnitConsoleProperties);
     }
 
     public void setModel(TestFrameworkRunningModel model) {
