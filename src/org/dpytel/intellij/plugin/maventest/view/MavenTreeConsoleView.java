@@ -23,6 +23,7 @@ import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.testframework.ui.TestResultsPanel;
+import com.intellij.openapi.util.Disposer;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -34,6 +35,7 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
     private MavenTestResultsPanel myConsolePanel;
     private final JUnitConsoleProperties myProperties;
     private final ExecutionEnvironment myEnvironment;
+    private JUnitRunningModel myModel;
 
     public MavenTreeConsoleView(final JUnitConsoleProperties properties,
                                 final ExecutionEnvironment environment,
@@ -62,11 +64,20 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
 
     public void attachToModel(@NotNull JUnitRunningModel model) {
         if (myConsolePanel != null) {
+            setMyModel(model);
             myConsolePanel.getTreeView().attachToModel(model);
             model.attachToTree(myConsolePanel.getTreeView());
             myConsolePanel.setModel(model);
             model.onUIBuilt();
             new TreeCollapser().setModel(model);
         }
+    }
+
+    private void setMyModel(JUnitRunningModel model) {
+        if (myModel != null) {
+            Disposer.dispose(myModel);
+        }
+        myModel = model;
+        Disposer.register(this, model);
     }
 }
