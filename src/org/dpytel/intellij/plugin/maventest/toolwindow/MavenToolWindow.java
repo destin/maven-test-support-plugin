@@ -16,6 +16,8 @@
 
 package org.dpytel.intellij.plugin.maventest.toolwindow;
 
+import com.intellij.execution.junit2.ui.model.CompletionEvent;
+import com.intellij.execution.junit2.ui.model.JUnitListenersNotifier;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -57,10 +59,8 @@ public class MavenToolWindow {
     }
 
     public void refreshTab(@NotNull MavenTreeConsoleView consoleView, MavenProject mavenProject, JUnitConsoleProperties jUnitConsoleProperties) {
-        ModelCreator modelCreator = new ModelCreator(mavenProject, jUnitConsoleProperties);
-        JUnitRunningModel newModel = modelCreator.createModel();
-        consoleView.initUI();
-        consoleView.attachToModel(newModel);
+        JUnitRunningModel newModel = createModel(mavenProject, jUnitConsoleProperties);
+        attachModelToView(consoleView, newModel);
         refreshCurrentTabWith(consoleView);
     }
 
@@ -71,11 +71,23 @@ public class MavenToolWindow {
         }
         ExecutionEnvironment environment = new ExecutionEnvironment();
         final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null);
-        consoleView.initUI();
-        ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties);
-        JUnitRunningModel model = modelCreator.createModel();
-        consoleView.attachToModel(model);
+        JUnitRunningModel model = createModel(mavenProject, consoleProperties);
+        attachModelToView(consoleView, model);
         return consoleView;
+    }
+
+    private void attachModelToView(MavenTreeConsoleView consoleView, JUnitRunningModel model) {
+        consoleView.initUI();
+        consoleView.attachToModel(model);
+        JUnitListenersNotifier notifier = model.getNotifier();
+        if (notifier != null) {
+            notifier.fireRunnerStateChanged(new CompletionEvent(true, 10));
+        }
+    }
+
+    private JUnitRunningModel createModel(MavenProject mavenProject, JUnitConsoleProperties jUnitConsoleProperties) {
+        ModelCreator modelCreator = new ModelCreator(mavenProject, jUnitConsoleProperties);
+        return modelCreator.createModel();
     }
 
     private void refreshCurrentTabWith(@NotNull MavenTreeConsoleView consoleView) {
