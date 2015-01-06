@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.12</version>
+  <version>0.0.13</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,11 @@
 
   <change-notes><![CDATA[
       <ul>
+       <li>0.0.13
+            <ul>
+            <li>Fixed problem with root result - no longer Tests in progress is displayed when there are no test results or all tests are successful
+            <li>Fixed refresh of results - no glitches when right clicking refreshed results
+            </ul>
        <li>0.0.12
             <ul>
             <li>Support for the menu item "Show maven tests" from the maven project window
