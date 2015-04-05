@@ -18,10 +18,8 @@ package org.dpytel.intellij.plugin.maventest.toolwindow;
 
 import com.intellij.execution.junit2.ui.model.CompletionEvent;
 import com.intellij.execution.junit2.ui.model.JUnitListenersNotifier;
-import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentContainer;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.openapi.util.IconLoader;
@@ -31,7 +29,7 @@ import com.intellij.openapi.wm.ToolWindowManager;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import org.dpytel.intellij.plugin.maventest.JUnitApiUtils;
-import org.dpytel.intellij.plugin.maventest.ModelCreator;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
@@ -44,50 +42,45 @@ public class MavenToolWindow {
     public static final String TOOL_WINDOW_ID = "Maven test results";
     private static final String TOOL_WINDOW_ICON = "/icons/showResultsToolWindow.png";
 
-    private final Project myProject;
+    private final MavenTestsModel model;
 
-    public MavenToolWindow(Project project) {
-        this.myProject = project;
+    public MavenToolWindow(MavenTestsModel model) {
+        this.model = model;
     }
 
     public void showMavenToolWindow(MavenProject mavenProject) {
-        final MavenTreeConsoleView consoleView = createMavenTreeConsoleView(mavenProject);
+        final MavenTreeConsoleView consoleView = createMavenTreeConsoleView();
         if (consoleView == null) {
             return;
         }
         showInToolWindow(consoleView, mavenProject.getFinalName());
     }
 
-    public void refreshTab(@NotNull MavenTreeConsoleView consoleView, MavenProject mavenProject, JUnitConsoleProperties jUnitConsoleProperties) {
-        JUnitRunningModel newModel = createModel(mavenProject, jUnitConsoleProperties);
-        attachModelToView(consoleView, newModel);
+    public void refreshTab(@NotNull MavenTreeConsoleView consoleView) {
+        model.refreshModel();
+        attachModelToView(consoleView);
         refreshCurrentTabWith(consoleView);
     }
 
-    private MavenTreeConsoleView createMavenTreeConsoleView(MavenProject mavenProject) {
-        final JUnitConsoleProperties consoleProperties = JUnitApiUtils.createConsoleProperties(myProject);
+    private MavenTreeConsoleView createMavenTreeConsoleView() {
+        final JUnitConsoleProperties consoleProperties = JUnitApiUtils.createConsoleProperties(model.getProject());
         if (consoleProperties == null) {
             return null;
         }
         ExecutionEnvironment environment = new ExecutionEnvironment();
         final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null);
-        JUnitRunningModel model = createModel(mavenProject, consoleProperties);
-        attachModelToView(consoleView, model);
+        model.refreshModel();
+        attachModelToView(consoleView);
         return consoleView;
     }
 
-    private void attachModelToView(MavenTreeConsoleView consoleView, JUnitRunningModel model) {
+    private void attachModelToView(MavenTreeConsoleView consoleView) {
         consoleView.initUI();
-        consoleView.attachToModel(model);
-        JUnitListenersNotifier notifier = model.getNotifier();
+        consoleView.attachToModel(model.getJUnitRunningModel());
+        JUnitListenersNotifier notifier = model.getJUnitRunningModel().getNotifier();
         if (notifier != null) {
             notifier.fireRunnerStateChanged(new CompletionEvent(true, 10));
         }
-    }
-
-    private JUnitRunningModel createModel(MavenProject mavenProject, JUnitConsoleProperties jUnitConsoleProperties) {
-        ModelCreator modelCreator = new ModelCreator(mavenProject, jUnitConsoleProperties);
-        return modelCreator.createModel();
     }
 
     private void refreshCurrentTabWith(@NotNull MavenTreeConsoleView consoleView) {
@@ -110,7 +103,7 @@ public class MavenToolWindow {
     }
 
     private ToolWindow getToolWindow() {
-        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(myProject);
+        ToolWindowManager toolWindowManager = ToolWindowManager.getInstance(model.getProject());
         ToolWindow toolWindow = toolWindowManager.getToolWindow(TOOL_WINDOW_ID);
         if (toolWindow == null) {
             toolWindow = createToolWindow(toolWindowManager);

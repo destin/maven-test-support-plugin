@@ -84,6 +84,7 @@ public class ModelCreator {
     }
 
     private void parseAndAddToRoot(TestProxy root, VirtualFile child) {
+
         try {
             TestProxy childTestProxy = reportParser.parseTestSuite(child);
             root.addChild(childTestProxy);

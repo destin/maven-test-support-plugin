@@ -19,14 +19,10 @@ package org.dpytel.intellij.plugin.maventest;
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
-import com.intellij.openapi.module.Module;
 import com.intellij.openapi.util.Disposer;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
-import com.intellij.testFramework.ModuleTestCase;
 import org.jetbrains.idea.maven.project.MavenProject;
 
-import java.io.File;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -35,7 +31,7 @@ import static org.junit.Assert.assertThat;
 /**
  *
  */
-public class ModelCreatorIT extends ModuleTestCase {
+public class ModelCreatorIT extends ITBase {
 
     private JUnitConsoleProperties consoleProperties;
     private JUnitRunningModel model;
@@ -48,7 +44,9 @@ public class ModelCreatorIT extends ModuleTestCase {
 
     @Override
     public void tearDown() throws Exception {
-        Disposer.dispose(model);
+        if (model != null) {
+            Disposer.dispose(model);
+        }
         super.tearDown();
     }
 
@@ -88,16 +86,6 @@ public class ModelCreatorIT extends ModuleTestCase {
 
     private void assertIsFailed(TestProxy proxy) {
         assertThat(proxy.getMagnitude(), is(PoolOfTestStates.FAILED_INDEX));
-    }
-
-    private MavenProject loadMavenModule(String moduleName) {
-        Module module = loadModule(
-            new File("./out/test/maven-test-support-plugin/test_projects/" + moduleName + "/" + moduleName + ".iml"));
-        VirtualFile pomFile = module.getModuleFile().getParent().findChild("pom.xml");
-        if (!pomFile.exists()) {
-            throw new IllegalStateException("File " + pomFile.getCanonicalPath() + " does not exist");
-        }
-        return new MavenProject(pomFile);
     }
 
     private TestProxy findChildByName(TestProxy parent, String proxyName) {
