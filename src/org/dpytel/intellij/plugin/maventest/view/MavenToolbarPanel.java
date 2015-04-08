@@ -17,10 +17,8 @@
 package org.dpytel.intellij.plugin.maventest.view;
 
 import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
-import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.TestFrameworkRunningModel;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshAction;
 import org.dpytel.intellij.plugin.maventest.actions.RefreshViewAction;
@@ -33,12 +31,14 @@ import javax.swing.*;
  */
 public class MavenToolbarPanel extends JUnitToolbarPanel {
 
+    private MavenTestsModel myModel;
     private RefreshViewAction myRefreshViewAction;
     private AutoRefreshAction autoRefreshAction;
 
     public MavenToolbarPanel(final TestConsoleProperties properties,
-                             ExecutionEnvironment environment, JComponent parent) {
+                             ExecutionEnvironment environment, JComponent parent, MavenTestsModel model) {
         super(properties, environment, parent);
+        setMyModel(model);
     }
 
     @Override
@@ -52,11 +52,9 @@ public class MavenToolbarPanel extends JUnitToolbarPanel {
         actionGroup.addAction(autoRefreshAction);
     }
 
-    @Override
-    public void setModel(TestFrameworkRunningModel model) {
-        super.setModel(model);
-        MavenTestsModel mavenTestsModel = new MavenTestsModel((JUnitRunningModel) model);
-        myRefreshViewAction.setModel(mavenTestsModel);
-        autoRefreshAction.setModel(mavenTestsModel);
+    private void setMyModel(MavenTestsModel myModel) {
+        this.myModel = myModel;
+        myRefreshViewAction.setModel(myModel);
+        autoRefreshAction.setModel(myModel);
     }
 }

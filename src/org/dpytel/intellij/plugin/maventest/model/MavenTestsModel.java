@@ -20,7 +20,9 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.info.TestInfo;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
+import com.intellij.openapi.Disposable;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Disposer;
 import org.dpytel.intellij.plugin.maventest.JUnitApiUtils;
 import org.dpytel.intellij.plugin.maventest.ModelCreator;
 import org.jetbrains.idea.maven.project.MavenProject;
@@ -28,19 +30,13 @@ import org.jetbrains.idea.maven.project.MavenProject;
 /**
  *
  */
-public class MavenTestsModel {
+public class MavenTestsModel implements Disposable {
 
     private final Project project;
     private final MavenProject mavenProject;
     private final JUnitConsoleProperties junitConsoleProperties;
     private JUnitRunningModel jUnitRunningModel;
-
-    public MavenTestsModel(JUnitRunningModel jUnitRunningModel) {
-        this.jUnitRunningModel = jUnitRunningModel;
-        this.project = getProjectFrom(jUnitRunningModel);
-        this.mavenProject = getMavenProjectFrom(jUnitRunningModel);
-        this.junitConsoleProperties = jUnitRunningModel.getProperties();
-    }
+    private ModelCreator modelCreator;
 
     public MavenTestsModel(Project project, MavenProject mavenProject) {
         this.project = project;
@@ -73,7 +69,18 @@ public class MavenTestsModel {
     }
 
     public void refreshModel() {
-        ModelCreator modelCreator = new ModelCreator(getMavenProject(), junitConsoleProperties);
+        modelCreator = new ModelCreator(getMavenProject(), junitConsoleProperties);
         jUnitRunningModel = modelCreator.createModel();
+    }
+
+    public void addTestResultChangedListener(TestResultChangedListener listener) {
+        modelCreator.addListener();
+    }
+
+    @Override
+    public void dispose() {
+        if (jUnitRunningModel != null) {
+            Disposer.dispose(jUnitRunningModel);
+        }
     }
 }

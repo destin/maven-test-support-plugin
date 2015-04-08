@@ -20,6 +20,7 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
+import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 
 /**
@@ -51,14 +52,19 @@ public class AutoRefreshAction extends ToggleAction {
         }
     }
 
-    public void setModel(MavenTestsModel model) {
-        this.model = model;
-    }
-
     private void enableAutoRefresh() {
-
+        model.addTestResultChangedListener(new TestResultChangedListener() {
+            @Override
+            public void testChanged() {
+                System.out.println("Changed");
+            }
+        });
     }
 
     private void disableAutoRefresh() {
+    }
+
+    public void setModel(MavenTestsModel model) {
+        this.model = model;
     }
 }

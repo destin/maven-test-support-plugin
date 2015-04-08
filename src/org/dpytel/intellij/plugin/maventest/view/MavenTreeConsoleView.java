@@ -16,7 +16,6 @@
 
 package org.dpytel.intellij.plugin.maventest.view;
 
-import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.model.TreeCollapser;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
@@ -24,7 +23,7 @@ import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.execution.testframework.ui.TestResultsPanel;
 import com.intellij.openapi.util.Disposer;
-import org.jetbrains.annotations.NotNull;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 
 import javax.swing.*;
 
@@ -35,20 +34,35 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
     private MavenTestResultsPanel myConsolePanel;
     private final JUnitConsoleProperties myProperties;
     private final ExecutionEnvironment myEnvironment;
-    private JUnitRunningModel myModel;
+    private MavenTestsModel myModel;
 
     public MavenTreeConsoleView(final JUnitConsoleProperties properties,
                                 final ExecutionEnvironment environment,
-                                final AbstractTestProxy unboundOutputRoot) {
+                                final AbstractTestProxy unboundOutputRoot,
+                                MavenTestsModel model) {
         super(properties, unboundOutputRoot);
         myProperties = properties;
         myEnvironment = environment;
+        this.myModel = model;
     }
 
     protected TestResultsPanel createTestResultsPanel() {
         myConsolePanel = new MavenTestResultsPanel(getConsole().getComponent(), getPrinter(), myProperties, myEnvironment,
-            getConsole().createConsoleActions(), this);
+            getConsole().createConsoleActions(), this, myModel);
         return myConsolePanel;
+    }
+
+    @Override
+    public void initUI() {
+        super.initUI();
+        if (myConsolePanel != null) {
+            setMyModel(myModel);
+            myConsolePanel.getTreeView().attachToModel(myModel.getJUnitRunningModel());
+            myModel.getJUnitRunningModel().attachToTree(myConsolePanel.getTreeView());
+            myConsolePanel.setModel(myModel);
+            myModel.getJUnitRunningModel().onUIBuilt();
+            new TreeCollapser().setModel(myModel.getJUnitRunningModel());
+        }
     }
 
     @Override
@@ -62,18 +76,7 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
         return myConsolePanel.getTreeView();
     }
 
-    public void attachToModel(@NotNull JUnitRunningModel model) {
-        if (myConsolePanel != null) {
-            setMyModel(model);
-            myConsolePanel.getTreeView().attachToModel(model);
-            model.attachToTree(myConsolePanel.getTreeView());
-            myConsolePanel.setModel(model);
-            model.onUIBuilt();
-            new TreeCollapser().setModel(model);
-        }
-    }
-
-    private void setMyModel(JUnitRunningModel model) {
+    private void setMyModel(MavenTestsModel model) {
         if (myModel != null) {
             Disposer.dispose(myModel);
         }

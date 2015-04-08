@@ -68,7 +68,7 @@ public class MavenToolWindow {
             return null;
         }
         ExecutionEnvironment environment = new ExecutionEnvironment();
-        final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null);
+        final MavenTreeConsoleView consoleView = new MavenTreeConsoleView(consoleProperties, environment, null, model);
         model.refreshModel();
         attachModelToView(consoleView);
         return consoleView;
@@ -76,7 +76,6 @@ public class MavenToolWindow {
 
     private void attachModelToView(MavenTreeConsoleView consoleView) {
         consoleView.initUI();
-        consoleView.attachToModel(model.getJUnitRunningModel());
         JUnitListenersNotifier notifier = model.getJUnitRunningModel().getNotifier();
         if (notifier != null) {
             notifier.fireRunnerStateChanged(new CompletionEvent(true, 10));
