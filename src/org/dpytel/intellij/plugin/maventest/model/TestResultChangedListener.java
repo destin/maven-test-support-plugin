@@ -16,11 +16,15 @@
 
 package org.dpytel.intellij.plugin.maventest.model;
 
+import com.intellij.openapi.vfs.VirtualFile;
+
 /**
  *
  */
 public interface TestResultChangedListener {
 
     void testChanged();
+
+    VirtualFile getRoot();
 
 }

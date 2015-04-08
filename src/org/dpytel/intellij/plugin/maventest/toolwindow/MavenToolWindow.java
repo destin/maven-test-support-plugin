@@ -57,9 +57,12 @@ public class MavenToolWindow {
     }
 
     public void refreshTab(@NotNull MavenTreeConsoleView consoleView) {
+        ToolWindow toolWindow = getToolWindow();
+        ContentManager contentManager = toolWindow.getContentManager();
+        final Content content = contentManager.getContent(consoleView.getComponent());
         model.refreshModel();
         attachModelToView(consoleView);
-        refreshCurrentTabWith(consoleView);
+        refreshContentWith(content, consoleView);
     }
 
     private MavenTreeConsoleView createMavenTreeConsoleView() {
@@ -82,10 +85,9 @@ public class MavenToolWindow {
         }
     }
 
-    private void refreshCurrentTabWith(@NotNull MavenTreeConsoleView consoleView) {
+    private void refreshContentWith(Content content, @NotNull MavenTreeConsoleView consoleView) {
         ToolWindow toolWindow = getToolWindow();
         ContentManager contentManager = toolWindow.getContentManager();
-        Content content = contentManager.getSelectedContent();
         content.setComponent(consoleView.getComponent());
         contentManager.setSelectedContent(content);
     }

@@ -20,7 +20,6 @@ import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
-import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 
 /**
@@ -28,9 +27,9 @@ import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
  */
 public class AutoRefreshAction extends ToggleAction {
 
-    private boolean selected = false;
     private final MavenTreeConsoleView consoleView;
     private MavenTestsModel model;
+    private AutoRefreshTestResultChangedListener testResultChangedListener;
 
     public AutoRefreshAction(MavenTreeConsoleView consoleView) {
         super("Auto refresh", "Automatically refreshes results when changed", AllIcons.Actions.Refresh);
@@ -39,12 +38,12 @@ public class AutoRefreshAction extends ToggleAction {
 
     @Override
     public boolean isSelected(AnActionEvent e) {
-        return selected;
+        return model != null && model.isAutorefreshEnabled();
     }
 
     @Override
     public void setSelected(AnActionEvent e, boolean state) {
-        selected = state;
+        model.setAutorefreshEnabled(state);
         if (state) {
             enableAutoRefresh();
         } else {
@@ -53,15 +52,14 @@ public class AutoRefreshAction extends ToggleAction {
     }
 
     private void enableAutoRefresh() {
-        model.addTestResultChangedListener(new TestResultChangedListener() {
-            @Override
-            public void testChanged() {
-                System.out.println("Changed");
-            }
-        });
+        if (testResultChangedListener == null) {
+            testResultChangedListener = new AutoRefreshTestResultChangedListener(model, consoleView);
+        }
+        model.addTestResultChangedListener(testResultChangedListener);
     }
 
     private void disableAutoRefresh() {
+        model.removeTestResultChangedListener(testResultChangedListener);
     }
 
     public void setModel(MavenTestsModel model) {

@@ -21,11 +21,16 @@ import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.vfs.*;
+import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshTestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.model.RootTestBuilder;
+import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.jdom.JDOMException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -40,6 +45,8 @@ public class ModelCreator {
     private final JUnitConsoleProperties consoleProperties;
 
     private final static Logger LOGGER = Logger.getInstance(ModelCreator.class);
+    private TestResultsFileListener testResultsFileListener;
+    private Set<TestResultChangedListener> listeners = new HashSet<TestResultChangedListener>();
 
     public ModelCreator(MavenProject mavenProject,
                         JUnitConsoleProperties consoleProperties) {
@@ -53,36 +60,24 @@ public class ModelCreator {
         return new JUnitRunningModel(root, consoleProperties);
     }
 
-    public void addListener() {
-        VirtualFileManager.getInstance().addVirtualFileListener(new VirtualFileAdapter() {
-            @Override
-            public void contentsChanged(VirtualFileEvent event) {
-                if (isTestResultFile(event.getFile())) {
-                    System.out.println("Content changed: " + event.getFile());
-                }
-                super.contentsChanged(event);
-            }
+    public void addListener(final TestResultChangedListener listener) {
+        listeners.add(listener);
+        if (testResultsFileListener == null) {
+            testResultsFileListener = new TestResultsFileListener();
+        }
+        VirtualFileManager.getInstance().addVirtualFileListener(testResultsFileListener);
+    }
 
-            @Override
-            public void fileCreated(VirtualFileEvent event) {
-                super.fileCreated(event);
-            }
-
-            @Override
-            public void fileDeleted(VirtualFileEvent event) {
-                super.fileDeleted(event);
-            }
-
-            @Override
-            public void fileMoved(VirtualFileMoveEvent event) {
-                super.fileMoved(event);
-            }
-        });
+    public void removeListener(AutoRefreshTestResultChangedListener listener) {
+        listeners.remove(listener);
+        if (listeners.isEmpty() && testResultsFileListener != null) {
+            VirtualFileManager.getInstance().removeVirtualFileListener(testResultsFileListener);
+        }
     }
 
     private boolean isTestResultFile(VirtualFile file) {
         String path = file.getCanonicalPath();
-        return (path.contains(SUREFIRE_REPORTS_DIR) || path.contains(FAILSAFE_REPORTS_DIR))
+        return path != null && (path.contains(SUREFIRE_REPORTS_DIR) || path.contains(FAILSAFE_REPORTS_DIR))
                 && "xml".equalsIgnoreCase(file.getExtension());
     }
 
@@ -127,6 +122,51 @@ public class ModelCreator {
             LOGGER.error("Cannot open file: " + child.getCanonicalPath(), e);
         } catch (JDOMException e) {
             LOGGER.error("Cannot parse file: " + child.getCanonicalPath(), e);
+        }
+    }
+
+    private class TestResultsFileListener extends VirtualFileAdapter {
+
+        @Override
+        public void contentsChanged(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileCreated(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileDeleted(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileMoved(@NotNull VirtualFileMoveEvent event) {
+            process(event);
+        }
+
+        private void process(@NotNull VirtualFileEvent event) {
+            final VirtualFile file = event.getFile();
+            if (isTestResultFile(file)) {
+                for (TestResultChangedListener listener : listeners) {
+                    final VirtualFile root = listener.getRoot();
+                    if (isAncestor(root, file)) {
+                        listener.testChanged();
+                    }
+                }
+            }
+        }
+
+        private boolean isAncestor(VirtualFile root, VirtualFile child) {
+            while (child != null) {
+                if (root.equals(child)) {
+                    return true;
+                }
+                child = child.getParent();
+            }
+            return false;
         }
     }
 }
