@@ -16,10 +16,11 @@
 
 package org.dpytel.intellij.plugin.maventest.actions;
 
-import com.intellij.icons.AllIcons;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
+import org.dpytel.intellij.plugin.maventest.Icons;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
+import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 
 /**
@@ -32,7 +33,9 @@ public class AutoRefreshAction extends ToggleAction {
     private AutoRefreshTestResultChangedListener testResultChangedListener;
 
     public AutoRefreshAction(MavenTreeConsoleView consoleView) {
-        super("Auto refresh", "Automatically refreshes results when changed", AllIcons.Actions.Refresh);
+        super(TextBundle.getText("maventestsupport.toolbar.actions.autorefresh.name"),
+            TextBundle.getText("maventestsupport.toolbar.actions.autorefresh.description"),
+            Icons.AUTOREFRESH);
         this.consoleView = consoleView;
     }
 

@@ -19,6 +19,7 @@ package org.dpytel.intellij.plugin.maventest.actions;
 import com.intellij.openapi.application.Application;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.vfs.VirtualFile;
+import org.apache.log4j.Logger;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.toolwindow.MavenToolWindow;
@@ -30,6 +31,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
  *
  */
 public class AutoRefreshTestResultChangedListener implements TestResultChangedListener {
+
+    private static final Logger LOG = Logger.getLogger(AutoRefreshTestResultChangedListener.class);
+
     private MavenTestsModel model;
     private MavenTreeConsoleView consoleView;
     private final AtomicBoolean waitingForExecution = new AtomicBoolean(false);
@@ -45,26 +49,39 @@ public class AutoRefreshTestResultChangedListener implements TestResultChangedLi
         if (wasWaitingForExecution) {
             return; // it is going to be refreshed anyway
         }
-        System.out.println("Changed");
         final Application application = ApplicationManager.getApplication();
         application.executeOnPooledThread(new Runnable() {
             @Override
             public void run() {
+                waitAndQueueRefresh(application);
+            }
+
+        });
+    }
+
+    private void waitAndQueueRefresh(Application application) {
+        waitForAWhile();
+        LOG.debug("Queuing refresh of " + model.getProject().getName());
+        application.invokeLater(new Runnable() {
+            @Override
+            public void run() {
                 try {
-                    Thread.sleep(1000);
-                    System.out.println("Refreshing " + model.getProject().getName());
-                    application.invokeLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            MavenToolWindow window = new MavenToolWindow(model);
-                            window.refreshTab(consoleView);
-                        }
-                    });
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    LOG.debug("Initiating refresh of " + model.getProject().getName());
+                    MavenToolWindow window = new MavenToolWindow(model);
+                    window.refreshTab(consoleView);
+                } finally {
+                    waitingForExecution.set(false);
                 }
             }
         });
+    }
+
+    private void waitForAWhile() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            LOG.warn("Waiting interrupted", e);
+        }
     }
 
     @Override

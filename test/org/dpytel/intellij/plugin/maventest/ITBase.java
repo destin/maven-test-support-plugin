@@ -26,11 +26,15 @@ import java.io.File;
 /**
  *
  */
-public class ITBase extends ModuleTestCase {
+public abstract class ITBase extends ModuleTestCase {
     protected MavenProject loadMavenModule(String moduleName) {
         Module module = loadModule(
             new File("./out/test/maven-test-support-plugin/test_projects/" + moduleName + "/" + moduleName + ".iml"));
-        VirtualFile pomFile = module.getModuleFile().getParent().findChild("pom.xml");
+        final VirtualFile moduleFile = module.getModuleFile();
+        if (moduleFile == null) {
+            throw new IllegalArgumentException("No module file for module" + moduleName);
+        }
+        VirtualFile pomFile = moduleFile.getParent().findChild("pom.xml");
         if (!pomFile.exists()) {
             throw new IllegalStateException("File " + pomFile.getCanonicalPath() + " does not exist");
         }
