@@ -19,7 +19,7 @@
       <ul>
        <li>0.0.14
             <ul>
-            <li>Added Auto refresh toggle to Test results toolbar. Currently toggle is disabled by default as this is still experimental.
+            <li>Added Auto refresh toggle to Test results toolbar. Currently the toggle is disabled by default as this is still experimental.
             </ul>
        <li>0.0.13
             <ul>
