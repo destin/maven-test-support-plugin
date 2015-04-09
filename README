@@ -2,6 +2,7 @@ This IntelliJ IDEA plugin is intended to simplify work with automated tests in M
 
 Current features:
 * Action "Show Test Results" that shows results of Surefire and Failsafe tests
+* Manual refreshing and auto-refreshing of test results
 
 # Show Test Results action
 Show Test Results window looks like IntelliJ's Junit test results panel.

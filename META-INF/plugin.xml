@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.13</version>
+  <version>0.0.14</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,10 @@
 
   <change-notes><![CDATA[
       <ul>
+       <li>0.0.14
+            <ul>
+            <li>Added Auto refresh toggle to Test results toolbar. Currently toggle is disabled by default as this is still experimental.
+            </ul>
        <li>0.0.13
             <ul>
             <li>Fixed problem with root result - no longer Tests in progress is displayed when there are no test results or all tests are successful
