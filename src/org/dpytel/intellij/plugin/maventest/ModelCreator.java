@@ -20,12 +20,17 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.diagnostic.Logger;
-import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.openapi.vfs.*;
+import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshTestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.model.RootTestBuilder;
+import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.jdom.JDOMException;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  *
@@ -33,11 +38,15 @@ import java.io.IOException;
 public class ModelCreator {
 
     public static final String RESULTS_FILE_PATTERN = "TEST-.*\\.xml";
+    public static final String SUREFIRE_REPORTS_DIR = "surefire-reports";
+    public static final String FAILSAFE_REPORTS_DIR = "failsafe-reports";
     private final ReportParser reportParser = new ReportParser();
     private final MavenProject mavenProject;
     private final JUnitConsoleProperties consoleProperties;
 
     private final static Logger LOGGER = Logger.getInstance(ModelCreator.class);
+    private TestResultsFileListener testResultsFileListener;
+    private Set<TestResultChangedListener> listeners = new HashSet<TestResultChangedListener>();
 
     public ModelCreator(MavenProject mavenProject,
                         JUnitConsoleProperties consoleProperties) {
@@ -51,14 +60,35 @@ public class ModelCreator {
         return new JUnitRunningModel(root, consoleProperties);
     }
 
+    public void addListener(final TestResultChangedListener listener) {
+        listeners.add(listener);
+        if (testResultsFileListener == null) {
+            testResultsFileListener = new TestResultsFileListener();
+        }
+        VirtualFileManager.getInstance().addVirtualFileListener(testResultsFileListener);
+    }
+
+    public void removeListener(AutoRefreshTestResultChangedListener listener) {
+        listeners.remove(listener);
+        if (listeners.isEmpty() && testResultsFileListener != null) {
+            VirtualFileManager.getInstance().removeVirtualFileListener(testResultsFileListener);
+        }
+    }
+
+    private boolean isTestResultFile(VirtualFile file) {
+        String path = file.getCanonicalPath();
+        return path != null && (path.contains(SUREFIRE_REPORTS_DIR) || path.contains(FAILSAFE_REPORTS_DIR))
+                && "xml".equalsIgnoreCase(file.getExtension());
+    }
+
     private void addChildResults(VirtualFile baseDir, TestProxy root) {
         if (baseDir.exists()) {
             baseDir.refresh(false, false);
             VirtualFile target = baseDir.findChild("target");
             if (target != null && target.exists()) {
                 target.refresh(false, false);
-                processReportsDir(target, root, "surefire-reports");
-                processReportsDir(target, root, "failsafe-reports");
+                processReportsDir(target, root, SUREFIRE_REPORTS_DIR);
+                processReportsDir(target, root, FAILSAFE_REPORTS_DIR);
             }
         }
     }
@@ -84,6 +114,7 @@ public class ModelCreator {
     }
 
     private void parseAndAddToRoot(TestProxy root, VirtualFile child) {
+
         try {
             TestProxy childTestProxy = reportParser.parseTestSuite(child);
             root.addChild(childTestProxy);
@@ -91,6 +122,51 @@ public class ModelCreator {
             LOGGER.error("Cannot open file: " + child.getCanonicalPath(), e);
         } catch (JDOMException e) {
             LOGGER.error("Cannot parse file: " + child.getCanonicalPath(), e);
+        }
+    }
+
+    private class TestResultsFileListener extends VirtualFileAdapter {
+
+        @Override
+        public void contentsChanged(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileCreated(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileDeleted(@NotNull VirtualFileEvent event) {
+            process(event);
+        }
+
+        @Override
+        public void fileMoved(@NotNull VirtualFileMoveEvent event) {
+            process(event);
+        }
+
+        private void process(@NotNull VirtualFileEvent event) {
+            final VirtualFile file = event.getFile();
+            if (isTestResultFile(file)) {
+                for (TestResultChangedListener listener : listeners) {
+                    final VirtualFile root = listener.getRoot();
+                    if (isAncestor(root, file)) {
+                        listener.testChanged();
+                    }
+                }
+            }
+        }
+
+        private boolean isAncestor(VirtualFile root, VirtualFile child) {
+            while (child != null) {
+                if (root.equals(child)) {
+                    return true;
+                }
+                child = child.getParent();
+            }
+            return false;
         }
     }
 }

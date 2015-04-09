@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.dpytel.intellij.plugin.maventest;
+package org.dpytel.intellij.plugin.maventest.actions;
 
 import com.intellij.openapi.actionSystem.ActionManager;
 import com.intellij.openapi.actionSystem.AnActionEvent;

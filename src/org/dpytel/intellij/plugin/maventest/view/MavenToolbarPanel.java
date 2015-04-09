@@ -19,9 +19,10 @@ package org.dpytel.intellij.plugin.maventest.view;
 import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.TestFrameworkRunningModel;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import org.dpytel.intellij.plugin.maventest.RefreshViewAction;
+import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshAction;
+import org.dpytel.intellij.plugin.maventest.actions.RefreshViewAction;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 
 import javax.swing.*;
 
@@ -30,11 +31,14 @@ import javax.swing.*;
  */
 public class MavenToolbarPanel extends JUnitToolbarPanel {
 
+    private MavenTestsModel myModel;
     private RefreshViewAction myRefreshViewAction;
+    private AutoRefreshAction autoRefreshAction;
 
     public MavenToolbarPanel(final TestConsoleProperties properties,
-                             ExecutionEnvironment environment, JComponent parent) {
+                             ExecutionEnvironment environment, JComponent parent, MavenTestsModel model) {
         super(properties, environment, parent);
+        setMyModel(model);
     }
 
     @Override
@@ -44,11 +48,13 @@ public class MavenToolbarPanel extends JUnitToolbarPanel {
         MavenTreeConsoleView consoleView = ((MavenTestResultsPanel) parent).getConsoleView();
         myRefreshViewAction = new RefreshViewAction(consoleView);
         actionGroup.addAction(myRefreshViewAction);
+        autoRefreshAction = new AutoRefreshAction(consoleView);
+        actionGroup.addAction(autoRefreshAction);
     }
 
-    @Override
-    public void setModel(TestFrameworkRunningModel model) {
-        super.setModel(model);
-        myRefreshViewAction.setModel(model);
+    private void setMyModel(MavenTestsModel myModel) {
+        this.myModel = myModel;
+        myRefreshViewAction.setModel(myModel);
+        autoRefreshAction.setModel(myModel);
     }
 }

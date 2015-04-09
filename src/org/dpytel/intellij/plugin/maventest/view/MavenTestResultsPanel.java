@@ -29,6 +29,7 @@ import com.intellij.execution.testframework.ui.TestStatusLine;
 import com.intellij.execution.testframework.ui.TestsOutputConsolePrinter;
 import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.progress.util.ColorProgressBar;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 import org.dpytel.intellij.plugin.maventest.model.TestsSummary;
 import org.dpytel.intellij.plugin.maventest.text.TextBundle;
 import org.jetbrains.annotations.NonNls;
@@ -47,15 +48,19 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     private TestTreeView myTreeView;
     private TestsOutputConsolePrinter myPrinter;
     private final MavenTreeConsoleView consoleView;
+    private final MavenTestsModel model;
 
     public MavenTestResultsPanel(final JComponent console,
                                  final TestsOutputConsolePrinter printer,
                                  final JUnitConsoleProperties properties,
                                  final ExecutionEnvironment environment,
-                                 final AnAction[] consoleActions, final MavenTreeConsoleView consoleView) {
+                                 final AnAction[] consoleActions,
+                                 final MavenTreeConsoleView consoleView,
+                                 MavenTestsModel model) {
         super(console, consoleActions, properties, environment, PROPORTION_PROPERTY, DEFAULT_PROPORTION);
         myPrinter = printer;
         this.consoleView = consoleView;
+        this.model = model;
     }
 
     public void initUI() {
@@ -74,7 +79,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     }
 
     protected ToolbarPanel createToolbarPanel() {
-        return new MavenToolbarPanel(myProperties, myEnvironment, this);
+        return new MavenToolbarPanel(myProperties, myEnvironment, this, model);
     }
 
     protected TestStatusLine createStatusLine() {
@@ -86,13 +91,14 @@ public class MavenTestResultsPanel extends TestResultsPanel {
         return myTreeView;
     }
 
-    public void setModel(final JUnitRunningModel model) {
-        final TestTreeView treeView = model.getTreeView();
+    public void setModel(final MavenTestsModel model) {
+        JUnitRunningModel jUnitRunningModel = model.getJUnitRunningModel();
+        final TestTreeView treeView = jUnitRunningModel.getTreeView();
         treeView.setLargeModel(true);
         setLeftComponent(treeView);
-        myToolbarPanel.setModel(model);
-        updateStatusLine(model);
-        model.addListener(new JUnitAdapter() {
+        myToolbarPanel.setModel(jUnitRunningModel);
+        updateStatusLine(jUnitRunningModel);
+        jUnitRunningModel.addListener(new JUnitAdapter() {
             @Override
             public void onTestSelected(final TestProxy test) {
                 if (myPrinter != null) {

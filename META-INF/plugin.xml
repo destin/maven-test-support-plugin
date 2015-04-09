@@ -101,7 +101,7 @@
           <add-to-group group-id="Maven.NavigatorActionsToolbar" anchor="last" />
           <add-to-group group-id="Maven.BaseProjectMenu" anchor="last" />
           <action id="MavenTest.ShowTestResults"
-                  class="org.dpytel.intellij.plugin.maventest.ShowTestResultsAction"
+                  class="org.dpytel.intellij.plugin.maventest.actions.ShowTestResultsAction"
                   text="Show Test Results"
                   description="Displays results of all tests in given project"
                   icon="/icons/showResultsAction.png"/>
