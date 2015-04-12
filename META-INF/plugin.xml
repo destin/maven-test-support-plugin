@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.14</version>
+  <version>0.0.15</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,11 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.15
+            <ul>
+            <li>Displaying test results of submodules
+            <li>Fixed not detecting some changes by auto-refresh
+            </ul>
        <li>0.0.14
             <ul>
             <li>Added Auto refresh toggle to Test results toolbar. Currently the toggle is disabled by default as this is still experimental.
