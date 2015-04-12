@@ -71,7 +71,7 @@ public class MavenTestsModel implements Disposable {
     }
 
     public void refreshModel() {
-        modelCreator = new ModelCreator(getMavenProject(), junitConsoleProperties);
+        modelCreator = new ModelCreator(getMavenProject(), junitConsoleProperties, project);
         jUnitRunningModel = modelCreator.createModel();
     }
 

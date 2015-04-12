@@ -20,6 +20,7 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.mock.MockVirtualFile;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
 import com.intellij.testFramework.PlatformUltraLiteTestFixture;
@@ -37,12 +38,14 @@ public class ModelCreatorTest {
     private PlatformUltraLiteTestFixture platformFixture;
     private MockMavenModuleBuilder builder;
     private JUnitRunningModel model;
+    private Project project;
 
     @Before
     public void setUp() throws Exception {
         platformFixture = PlatformUltraLiteTestFixture.getFixture();
         platformFixture.setUp();
         builder = MockMavenModuleBuilder.newModule();
+        project = mock(Project.class);
     }
 
     @After
@@ -78,7 +81,7 @@ public class ModelCreatorTest {
     }
 
     private JUnitRunningModel createModel() {
-        ModelCreator modelCreator = new ModelCreator(builder.build(), consoleProperties);
+        ModelCreator modelCreator = new ModelCreator(builder.build(), consoleProperties, project);
         return modelCreator.createModel();
     }
 

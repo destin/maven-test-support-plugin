@@ -20,13 +20,16 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.diagnostic.Logger;
+import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.*;
 import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshTestResultChangedListener;
 import org.dpytel.intellij.plugin.maventest.model.RootTestBuilder;
 import org.dpytel.intellij.plugin.maventest.model.TestResultChangedListener;
 import org.jdom.JDOMException;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.idea.maven.model.MavenConstants;
 import org.jetbrains.idea.maven.project.MavenProject;
+import org.jetbrains.idea.maven.project.MavenProjectsManager;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -45,19 +48,25 @@ public class ModelCreator {
     private final JUnitConsoleProperties consoleProperties;
 
     private final static Logger LOGGER = Logger.getInstance(ModelCreator.class);
+    private final MavenProjectsManager mavenProjectsManager;
     private TestResultsFileListener testResultsFileListener;
     private Set<TestResultChangedListener> listeners = new HashSet<TestResultChangedListener>();
 
     public ModelCreator(MavenProject mavenProject,
-                        JUnitConsoleProperties consoleProperties) {
+                        JUnitConsoleProperties consoleProperties, Project project) {
         this.mavenProject = mavenProject;
         this.consoleProperties = consoleProperties;
+        mavenProjectsManager = MavenProjectsManager.getInstance(project);
     }
 
     public JUnitRunningModel createModel() {
-        TestProxy root = RootTestBuilder.fromMavenProject(this.mavenProject).build();
+        TestProxy root = createRootTestProxy(this.mavenProject);
         addChildResults(mavenProject.getDirectoryFile(), root);
         return new JUnitRunningModel(root, consoleProperties);
+    }
+
+    private TestProxy createRootTestProxy(MavenProject mavenProject) {
+        return RootTestBuilder.fromMavenProject(mavenProject).build();
     }
 
     public void addListener(final TestResultChangedListener listener) {
@@ -90,6 +99,7 @@ public class ModelCreator {
                 processReportsDir(target, root, SUREFIRE_REPORTS_DIR);
                 processReportsDir(target, root, FAILSAFE_REPORTS_DIR);
             }
+            processSubProjects(baseDir, root);
         }
     }
 
@@ -123,6 +133,27 @@ public class ModelCreator {
         } catch (JDOMException e) {
             LOGGER.error("Cannot parse file: " + child.getCanonicalPath(), e);
         }
+    }
+
+    private void processSubProjects(VirtualFile baseDir, TestProxy root) {
+        for (VirtualFile child : baseDir.getChildren()) {
+            final MavenProject childMavenProject = getMavenProject(child);
+            if (childMavenProject != null) {
+                final TestProxy childTestProxy = createRootTestProxy(childMavenProject);
+                addChildResults(child, childTestProxy);
+                root.addChild(childTestProxy);
+            }
+        }
+    }
+
+    private MavenProject getMavenProject(VirtualFile file) {
+        if (file.isDirectory() && file.exists()) {
+            final VirtualFile pom = file.findChild(MavenConstants.POM_XML);
+            if (pom != null && pom.exists()) {
+                return mavenProjectsManager.findProject(pom);
+            }
+        }
+        return null;
     }
 
     private class TestResultsFileListener extends VirtualFileAdapter {

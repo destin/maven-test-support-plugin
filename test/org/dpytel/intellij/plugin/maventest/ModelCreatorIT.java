@@ -52,7 +52,7 @@ public class ModelCreatorIT extends ITBase {
 
     public void testAllKindsOfResults() throws Exception {
         MavenProject mavenProject = loadMavenModule("submodule");
-        ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties);
+        ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties, getProject());
 
         model = modelCreator.createModel();
 
