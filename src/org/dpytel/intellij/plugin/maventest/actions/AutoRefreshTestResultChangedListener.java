@@ -68,6 +68,7 @@ public class AutoRefreshTestResultChangedListener implements TestResultChangedLi
                 try {
                     LOG.debug("Initiating refresh of " + model.getProject().getName());
                     MavenToolWindow window = new MavenToolWindow(model);
+                    waitingForExecution.set(false);
                     window.refreshTab(consoleView);
                 } finally {
                     waitingForExecution.set(false);
