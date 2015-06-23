@@ -18,7 +18,6 @@ package org.dpytel.intellij.plugin.maventest.toolwindow;
 
 import com.intellij.execution.junit2.ui.model.CompletionEvent;
 import com.intellij.execution.junit2.ui.model.JUnitListenersNotifier;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.ui.ComponentContainer;
 import com.intellij.openapi.util.Disposer;
@@ -30,6 +29,7 @@ import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentManager;
 import org.dpytel.intellij.plugin.maventest.JUnitApiUtils;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
+import org.dpytel.intellij.plugin.maventest.view.MavenTestResultsConsoleProperties;
 import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
@@ -66,7 +66,8 @@ public class MavenToolWindow {
     }
 
     private MavenTreeConsoleView createMavenTreeConsoleView() {
-        final JUnitConsoleProperties consoleProperties = JUnitApiUtils.createConsoleProperties(model.getProject());
+        final MavenTestResultsConsoleProperties consoleProperties =
+                JUnitApiUtils.createConsoleProperties(model);
         if (consoleProperties == null) {
             return null;
         }

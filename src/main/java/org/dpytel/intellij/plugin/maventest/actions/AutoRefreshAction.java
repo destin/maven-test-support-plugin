@@ -29,24 +29,25 @@ import org.dpytel.intellij.plugin.maventest.view.MavenTreeConsoleView;
 public class AutoRefreshAction extends ToggleAction {
 
     private final MavenTreeConsoleView consoleView;
-    private MavenTestsModel model;
+    private MavenTestsModel myModel;
     private AutoRefreshTestResultChangedListener testResultChangedListener;
 
-    public AutoRefreshAction(MavenTreeConsoleView consoleView) {
+    public AutoRefreshAction(MavenTreeConsoleView consoleView, MavenTestsModel model) {
         super(TextBundle.getText("maventestsupport.toolbar.actions.autorefresh.name"),
             TextBundle.getText("maventestsupport.toolbar.actions.autorefresh.description"),
             Icons.AUTOREFRESH);
         this.consoleView = consoleView;
+        this.myModel = model;
     }
 
     @Override
     public boolean isSelected(AnActionEvent e) {
-        return model != null && model.isAutorefreshEnabled();
+        return myModel != null && myModel.isAutorefreshEnabled();
     }
 
     @Override
     public void setSelected(AnActionEvent e, boolean state) {
-        model.setAutorefreshEnabled(state);
+        myModel.setAutorefreshEnabled(state);
         if (state) {
             enableAutoRefresh();
         } else {
@@ -56,16 +57,13 @@ public class AutoRefreshAction extends ToggleAction {
 
     private void enableAutoRefresh() {
         if (testResultChangedListener == null) {
-            testResultChangedListener = new AutoRefreshTestResultChangedListener(model, consoleView);
+            testResultChangedListener = new AutoRefreshTestResultChangedListener(myModel, consoleView);
         }
-        model.addTestResultChangedListener(testResultChangedListener);
+        myModel.addTestResultChangedListener(testResultChangedListener);
     }
 
     private void disableAutoRefresh() {
-        model.removeTestResultChangedListener(testResultChangedListener);
+        myModel.removeTestResultChangedListener(testResultChangedListener);
     }
 
-    public void setModel(MavenTestsModel model) {
-        this.model = model;
-    }
 }

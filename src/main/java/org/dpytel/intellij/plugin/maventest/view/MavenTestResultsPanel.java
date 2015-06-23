@@ -20,7 +20,6 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.JUnitTestTreeView;
 import com.intellij.execution.junit2.ui.model.JUnitAdapter;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestTreeView;
 import com.intellij.execution.testframework.ToolbarPanel;
@@ -52,7 +51,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
 
     public MavenTestResultsPanel(final JComponent console,
                                  final TestsOutputConsolePrinter printer,
-                                 final JUnitConsoleProperties properties,
+                                 final MavenTestResultsConsoleProperties properties,
                                  final ExecutionEnvironment environment,
                                  final AnAction[] consoleActions,
                                  final MavenTreeConsoleView consoleView,
@@ -79,7 +78,8 @@ public class MavenTestResultsPanel extends TestResultsPanel {
     }
 
     protected ToolbarPanel createToolbarPanel() {
-        return new MavenToolbarPanel(myProperties, myEnvironment, this, model);
+        return new MavenToolbarPanel((MavenTestResultsConsoleProperties) myProperties,
+                myEnvironment, this, model);
     }
 
     protected TestStatusLine createStatusLine() {

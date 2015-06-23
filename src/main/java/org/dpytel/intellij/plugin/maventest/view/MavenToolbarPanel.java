@@ -20,8 +20,6 @@ import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
-import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshAction;
-import org.dpytel.intellij.plugin.maventest.actions.RefreshViewAction;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 
 import javax.swing.*;
@@ -31,30 +29,18 @@ import javax.swing.*;
  */
 public class MavenToolbarPanel extends JUnitToolbarPanel {
 
-    private MavenTestsModel myModel;
-    private RefreshViewAction myRefreshViewAction;
-    private AutoRefreshAction autoRefreshAction;
-
-    public MavenToolbarPanel(final TestConsoleProperties properties,
+    public MavenToolbarPanel(final MavenTestResultsConsoleProperties properties,
                              ExecutionEnvironment environment, JComponent parent, MavenTestsModel model) {
         super(properties, environment, parent);
-        setMyModel(model);
     }
 
-    @Override
+    /**
+     * Method needed for pre-IntelliJ 15 EAP. Starting from IJ 15 properties.appendAdditionalActions is
+     * invoked directly.
+     */
     protected void appendAdditionalActions(DefaultActionGroup actionGroup, TestConsoleProperties properties,
                                            ExecutionEnvironment environment, JComponent parent) {
-        super.appendAdditionalActions(actionGroup, properties, environment, parent);
-        MavenTreeConsoleView consoleView = ((MavenTestResultsPanel) parent).getConsoleView();
-        myRefreshViewAction = new RefreshViewAction(consoleView);
-        actionGroup.addAction(myRefreshViewAction);
-        autoRefreshAction = new AutoRefreshAction(consoleView);
-        actionGroup.addAction(autoRefreshAction);
-    }
-
-    private void setMyModel(MavenTestsModel myModel) {
-        this.myModel = myModel;
-        myRefreshViewAction.setModel(myModel);
-        autoRefreshAction.setModel(myModel);
+        MavenTestResultsConsoleProperties myProperties = (MavenTestResultsConsoleProperties) properties;
+        myProperties.appendAdditionalActions(actionGroup, environment, parent);
     }
 }

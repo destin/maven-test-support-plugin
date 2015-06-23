@@ -18,9 +18,9 @@ package org.dpytel.intellij.plugin.maventest;
 
 import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.openapi.util.Disposer;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 import org.jetbrains.idea.maven.project.MavenProject;
 
 import java.util.List;
@@ -33,13 +33,11 @@ import static org.junit.Assert.assertThat;
  */
 public class ModelCreatorIT extends ITBase {
 
-    private JUnitConsoleProperties consoleProperties;
     private JUnitRunningModel model;
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        consoleProperties = JUnitApiUtils.createConsoleProperties(getProject());
     }
 
     @Override
@@ -52,9 +50,9 @@ public class ModelCreatorIT extends ITBase {
 
     public void testAllKindsOfResults() throws Exception {
         MavenProject mavenProject = loadMavenModule("submodule");
-        ModelCreator modelCreator = new ModelCreator(mavenProject, consoleProperties, getProject());
-
-        model = modelCreator.createModel();
+        MavenTestsModel mavenTestsModel = new MavenTestsModel(getProject(), mavenProject);
+        mavenTestsModel.refreshModel();
+        model = mavenTestsModel.getJUnitRunningModel();
 
         TestProxy root = model.getRoot();
         assertIsError(root);

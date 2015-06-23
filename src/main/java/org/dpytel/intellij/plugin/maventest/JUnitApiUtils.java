@@ -21,22 +21,23 @@ import com.intellij.execution.configurations.ConfigurationFactory;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
-import com.intellij.openapi.project.Project;
+import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
+import org.dpytel.intellij.plugin.maventest.view.MavenTestResultsConsoleProperties;
 
 /**
  *
  */
 public class JUnitApiUtils {
-    public static JUnitConsoleProperties createConsoleProperties(Project project) {
+    public static MavenTestResultsConsoleProperties createConsoleProperties(MavenTestsModel model) {
         JUnitConfigurationType jUnitConfigurationType = JUnitConfigurationType.getInstance();
         if (jUnitConfigurationType == null) {
             return null;
         }
         ConfigurationFactory configurationFactory = jUnitConfigurationType.getConfigurationFactories()[0];
-        JUnitConfiguration myConfiguration = new JUnitConfiguration("maven", project, configurationFactory);
+        JUnitConfiguration configuration = new JUnitConfiguration("maven", model.getProject(), configurationFactory);
         Executor executor = new DefaultRunExecutor();
-        final JUnitConsoleProperties consoleProperties = new JUnitConsoleProperties(myConfiguration, executor);
+        final MavenTestResultsConsoleProperties consoleProperties =
+                new MavenTestResultsConsoleProperties(model, configuration, executor);
         return consoleProperties;
     }
 }

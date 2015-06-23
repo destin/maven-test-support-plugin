@@ -17,7 +17,6 @@
 package org.dpytel.intellij.plugin.maventest.view;
 
 import com.intellij.execution.junit2.ui.model.TreeCollapser;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.execution.testframework.AbstractTestProxy;
 import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
@@ -32,11 +31,11 @@ import javax.swing.*;
  */
 public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
     private MavenTestResultsPanel myConsolePanel;
-    private final JUnitConsoleProperties myProperties;
+    private final MavenTestResultsConsoleProperties myProperties;
     private final ExecutionEnvironment myEnvironment;
     private MavenTestsModel myModel;
 
-    public MavenTreeConsoleView(final JUnitConsoleProperties properties,
+    public MavenTreeConsoleView(final MavenTestResultsConsoleProperties properties,
                                 final ExecutionEnvironment environment,
                                 final AbstractTestProxy unboundOutputRoot,
                                 MavenTestsModel model) {

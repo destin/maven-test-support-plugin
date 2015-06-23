@@ -26,6 +26,7 @@ import com.intellij.openapi.util.Disposer;
 import org.dpytel.intellij.plugin.maventest.JUnitApiUtils;
 import org.dpytel.intellij.plugin.maventest.ModelCreator;
 import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshTestResultChangedListener;
+import org.dpytel.intellij.plugin.maventest.view.MavenTestResultsConsoleProperties;
 import org.jetbrains.idea.maven.project.MavenProject;
 
 /**
@@ -35,7 +36,7 @@ public class MavenTestsModel implements Disposable {
 
     private final Project project;
     private final MavenProject mavenProject;
-    private final JUnitConsoleProperties junitConsoleProperties;
+    private final MavenTestResultsConsoleProperties junitConsoleProperties;
     private JUnitRunningModel jUnitRunningModel;
     private ModelCreator modelCreator;
     private boolean autorefreshEnabled;
@@ -43,7 +44,7 @@ public class MavenTestsModel implements Disposable {
     public MavenTestsModel(Project project, MavenProject mavenProject) {
         this.project = project;
         this.mavenProject = mavenProject;
-        this.junitConsoleProperties = JUnitApiUtils.createConsoleProperties(project);
+        this.junitConsoleProperties = JUnitApiUtils.createConsoleProperties(this);
     }
 
     private static Project getProjectFrom(JUnitRunningModel jUnitRunningModel) {

@@ -31,22 +31,20 @@ import org.jetbrains.annotations.NotNull;
 public class RefreshViewAction extends DumbAwareAction {
 
     private final MavenTreeConsoleView consoleView;
-    private MavenTestsModel model;
+    private MavenTestsModel myModel;
 
-    public RefreshViewAction(MavenTreeConsoleView consoleView) {
+    public RefreshViewAction(MavenTreeConsoleView consoleView, MavenTestsModel model) {
         super(TextBundle
             .getText("maventestsupport.toolbar.actions.refresh.name"), TextBundle
             .getText("maventestsupport.toolbar.actions.refresh.description"), AllIcons.Actions.Refresh);
         this.consoleView = consoleView;
+        this.myModel = model;
     }
 
     @Override
     public void actionPerformed(@NotNull AnActionEvent e) {
-        MavenToolWindow window = new MavenToolWindow(model);
+        MavenToolWindow window = new MavenToolWindow(myModel);
         window.refreshTab(consoleView);
     }
 
-    public void setModel(MavenTestsModel model) {
-        this.model = model;
-    }
 }
