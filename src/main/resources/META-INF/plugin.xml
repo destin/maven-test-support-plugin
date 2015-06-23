@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.15</version>
+  <version>0.0.16</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,12 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.16
+            <ul>
+            <li>Fixed NPE in IJ 15 EAP. Side effect - refresh buttons in IJ 15 EAP moved to "more actions" menu.
+                Needs to be fixed in next version
+            <li>Mavenized plugin project
+            </ul>
       <li>0.0.15
             <ul>
             <li>Displaying test results of submodules
