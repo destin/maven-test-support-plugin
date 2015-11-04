@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.17/version>
+  <version>0.0.17</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
