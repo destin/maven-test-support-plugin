@@ -30,8 +30,8 @@ import javax.swing.*;
 public class MavenToolbarPanel extends JUnitToolbarPanel {
 
     public MavenToolbarPanel(final MavenTestResultsConsoleProperties properties,
-                             ExecutionEnvironment environment, JComponent parent, MavenTestsModel model) {
-        super(properties, environment, parent);
+                             JComponent parent, MavenTestsModel model) {
+        super(properties, parent);
     }
 
     /**

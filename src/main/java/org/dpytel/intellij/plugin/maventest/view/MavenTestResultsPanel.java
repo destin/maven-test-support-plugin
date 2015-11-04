@@ -56,7 +56,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
                                  final AnAction[] consoleActions,
                                  final MavenTreeConsoleView consoleView,
                                  MavenTestsModel model) {
-        super(console, consoleActions, properties, environment, PROPORTION_PROPERTY, DEFAULT_PROPORTION);
+        super(console, consoleActions, properties, PROPORTION_PROPERTY, DEFAULT_PROPORTION);
         myPrinter = printer;
         this.consoleView = consoleView;
         this.model = model;
@@ -79,7 +79,7 @@ public class MavenTestResultsPanel extends TestResultsPanel {
 
     protected ToolbarPanel createToolbarPanel() {
         return new MavenToolbarPanel((MavenTestResultsConsoleProperties) myProperties,
-                myEnvironment, this, model);
+                this, model);
     }
 
     protected TestStatusLine createStatusLine() {

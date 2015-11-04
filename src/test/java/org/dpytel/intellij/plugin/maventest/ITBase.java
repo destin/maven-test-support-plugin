@@ -28,8 +28,9 @@ import java.io.File;
  */
 public abstract class ITBase extends ModuleTestCase {
     protected MavenProject loadMavenModule(String moduleName) {
+        String modulePath = "./out/test/maven-test-support-plugin/test_projects/" + moduleName + "/" + moduleName + ".iml";
         Module module = loadModule(
-            new File("./out/test/maven-test-support-plugin/test_projects/" + moduleName + "/" + moduleName + ".iml"));
+            new File(modulePath).getAbsolutePath());
         final VirtualFile moduleFile = module.getModuleFile();
         if (moduleFile == null) {
             throw new IllegalArgumentException("No module file for module" + moduleName);

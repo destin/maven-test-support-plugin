@@ -9,7 +9,7 @@
     </scm>
 
     <properties>
-        <intellij.path>/home/dawid/tools/ide/idea</intellij.path>
+        <intellij.path>/home/dawid/tools/ide/idea-IC-143.381.42</intellij.path>
         <intellij.lib.path>${intellij.path}/lib</intellij.lib.path>
         <intellij.plugins.path>${intellij.path}/plugins</intellij.plugins.path>
     </properties>
