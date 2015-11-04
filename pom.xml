@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.destin</groupId>
     <artifactId>maven-test-support-plugin</artifactId>
-    <version>0.0.17-SNAPSHOT</version>
+    <version>0.0.17</version>
 
     <scm>
         <developerConnection>scm:git:https://github.com/destin/maven-test-support-plugin.git</developerConnection>
