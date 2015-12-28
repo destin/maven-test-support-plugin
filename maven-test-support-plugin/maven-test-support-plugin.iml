@@ -15,7 +15,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.openapi:openapi:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/openapi.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -24,7 +24,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.openapi:extensions:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/extensions.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/extensions.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -33,7 +33,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:util:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/util.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/util.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -42,7 +42,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:idea:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/idea.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -51,7 +51,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:idea_rt:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea_rt.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/idea_rt.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -60,7 +60,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.jetbrains:annotations:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/annotations.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -69,7 +69,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.jdom:jdom:0.2">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/jdom.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/jdom.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -78,7 +78,7 @@
     <orderEntry type="module-library">
       <library name="Maven: log4j:log4j:1.2.17">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/log4j.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/lib/log4j.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -87,7 +87,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:junit:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/idea-junit.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/plugins/junit/lib/idea-junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -96,7 +96,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:maven:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/maven/lib/maven.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/plugins/maven/lib/maven.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -105,7 +105,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:maven-server-api:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/maven/lib/maven-server-api.jar!/" />
+          <root url="jar:///tmp/intellij/ideaIC-15.0.2/plugins/maven/lib/maven-server-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
