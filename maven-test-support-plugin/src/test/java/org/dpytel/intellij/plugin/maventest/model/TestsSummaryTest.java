@@ -21,8 +21,9 @@ import com.intellij.execution.junit2.states.NotFailedState;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.mock.MockVirtualFile;
-import com.intellij.openapi.util.Disposer;
-import com.intellij.testFramework.PlatformUltraLiteTestFixture;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.junit.After;
 import org.junit.Before;
@@ -33,6 +34,7 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 /**
@@ -44,15 +46,13 @@ public class TestsSummaryTest {
 
     @Before
     public void setUp() throws Exception {
-        PlatformUltraLiteTestFixture.getFixture().setUp();
+        ApplicationManager.setApplication(mock(Application.class, RETURNS_DEEP_STUBS),
+                mock(Disposable.class));
     }
 
     @After
     public void tearDown() throws Exception {
-        if (model != null) {
-            Disposer.dispose(model);
-        }
-        PlatformUltraLiteTestFixture.getFixture().tearDown();
+
     }
 
     @Test

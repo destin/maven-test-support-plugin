@@ -20,40 +20,37 @@ import com.intellij.execution.junit2.TestProxy;
 import com.intellij.execution.junit2.ui.model.JUnitRunningModel;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.mock.MockVirtualFile;
+import com.intellij.openapi.Disposable;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Disposer;
 import com.intellij.rt.execution.junit.states.PoolOfTestStates;
-import com.intellij.testFramework.PlatformUltraLiteTestFixture;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.RETURNS_DEEP_STUBS;
 import static org.mockito.Mockito.mock;
 
 public class ModelCreatorTest {
 
     private final JUnitConsoleProperties consoleProperties = mock(JUnitConsoleProperties.class);
-    private PlatformUltraLiteTestFixture platformFixture;
     private MockMavenModuleBuilder builder;
     private JUnitRunningModel model;
     private Project project;
 
     @Before
     public void setUp() throws Exception {
-        platformFixture = PlatformUltraLiteTestFixture.getFixture();
-        platformFixture.setUp();
+        ApplicationManager.setApplication(mock(Application.class, RETURNS_DEEP_STUBS),
+                mock(Disposable.class));
         builder = MockMavenModuleBuilder.newModule();
         project = mock(Project.class);
     }
 
     @After
     public void tearDown() throws Exception {
-        if (model != null) {
-            Disposer.dispose(model);
-        }
-        platformFixture.tearDown();
     }
 
     @Test
