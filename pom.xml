@@ -14,6 +14,7 @@
         <intellij.install.basedir>/tmp/intellij</intellij.install.basedir>
 
         <intellij.install.dir>${intellij.install.basedir}/${intellij.version}</intellij.install.dir>
+        <plugin.jar>${pom.basedir}/maven-test-support-plugin/target/maven-test-support-plugin-${version}.jar</plugin.jar>
     </properties>
 
     <modules>
