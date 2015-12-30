@@ -1,3 +1,6 @@
 language: java
-install: mvn install -DskipTests=true -PIJ15
-script: mvn test -PIJ15
+env:
+    - PROFILE=IJ15
+    - PROFILE=IJ16EAP
+install: mvn install -DskipTests=true -P$PROFILE
+script: mvn test -P$PROFILE
