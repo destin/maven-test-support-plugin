@@ -31,7 +31,7 @@
         <intellij.path>${intellij.install.dir}</intellij.path>
         <intellij.lib.path>${intellij.path}/lib</intellij.lib.path>
         <intellij.plugins.path>${intellij.path}/plugins</intellij.plugins.path>
-        <plugin.jar>${build.directory}/${build.finalName}.jar</plugin.jar>
+        <plugin.jar>${project.build.directory}/${project.build.finalName}.jar</plugin.jar>
     </properties>
 
     <dependencies>
@@ -157,14 +157,6 @@
     </dependencies>
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.6</source>
-                    <target>1.6</target>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
