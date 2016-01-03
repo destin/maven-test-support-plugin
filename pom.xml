@@ -48,8 +48,8 @@
         <profile>
             <id>IJ16EAP</id>
             <properties>
-                <intellij.version>ideaIC-144.2151.16</intellij.version>
-                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-144.2151.16-custom-jdk-linux.tar.gz</intellij.install.downloadUrl>
+                <intellij.version>ideaIC-144.2608.2</intellij.version>
+                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-144.2608.2-custom-jdk-linux.tar.gz</intellij.install.downloadUrl>
             </properties>
         </profile>
 
