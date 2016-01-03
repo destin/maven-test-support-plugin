@@ -2,12 +2,13 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.github.destin</groupId>
     <artifactId>maven-test-support-plugin-parent</artifactId>
-    <version>0.0.18-SNAPSHOT</version>
+    <version>0.0.18</version>
     <packaging>pom</packaging>
 
     <scm>
         <developerConnection>scm:git:git@github.com:destin/maven-test-support-plugin.git</developerConnection>
-    </scm>
+      <tag>maven-test-support-plugin-parent-0.0.18</tag>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
