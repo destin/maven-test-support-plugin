@@ -6,7 +6,7 @@
     <packaging>pom</packaging>
 
     <scm>
-        <developerConnection>scm:git:https://github.com/destin/maven-test-support-plugin.git</developerConnection>
+        <developerConnection>scm:git:git@github.com:destin/maven-test-support-plugin.git</developerConnection>
     </scm>
 
     <properties>
