@@ -24,6 +24,13 @@
         <processorPath useClasspath="true" />
         <module name="maven-test-support-plugin (1)" />
       </profile>
+      <profile default="false" name="Annotation profile for maven-test-support-plugin" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="maven-test-support-plugin" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="intellij-installer" target="1.5" />
