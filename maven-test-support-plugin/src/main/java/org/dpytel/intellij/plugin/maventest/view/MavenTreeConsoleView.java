@@ -76,7 +76,7 @@ public class MavenTreeConsoleView extends BaseTestsOutputConsoleView {
     }
 
     private void setMyModel(MavenTestsModel model) {
-        if (myModel != null) {
+        if (myModel != null && myModel != model) {
             Disposer.dispose(myModel);
         }
         myModel = model;
