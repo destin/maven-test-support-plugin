@@ -67,8 +67,8 @@
         <profile>
             <id>IJ15</id>
             <properties>
-                <intellij.version>ideaIC-15.0.2</intellij.version>
-                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-15.0.2.tar.gz</intellij.install.downloadUrl>
+                <intellij.version>ideaIC-15.0.3</intellij.version>
+                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-15.0.3.tar.gz</intellij.install.downloadUrl>
             </properties>
         </profile>
 
