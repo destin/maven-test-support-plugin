@@ -17,9 +17,6 @@
 package org.dpytel.intellij.plugin.maventest.view;
 
 import com.intellij.execution.junit2.ui.actions.JUnitToolbarPanel;
-import com.intellij.execution.runners.ExecutionEnvironment;
-import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
 
 import javax.swing.*;
@@ -32,15 +29,5 @@ public class MavenToolbarPanel extends JUnitToolbarPanel {
     public MavenToolbarPanel(final MavenTestResultsConsoleProperties properties,
                              JComponent parent, MavenTestsModel model) {
         super(properties, parent);
-    }
-
-    /**
-     * Method needed for pre-IntelliJ 15 EAP. Starting from IJ 15 properties.appendAdditionalActions is
-     * invoked directly.
-     */
-    protected void appendAdditionalActions(DefaultActionGroup actionGroup, TestConsoleProperties properties,
-                                           ExecutionEnvironment environment, JComponent parent) {
-        MavenTestResultsConsoleProperties myProperties = (MavenTestResultsConsoleProperties) properties;
-        myProperties.appendAdditionalActions(actionGroup, environment, parent);
     }
 }

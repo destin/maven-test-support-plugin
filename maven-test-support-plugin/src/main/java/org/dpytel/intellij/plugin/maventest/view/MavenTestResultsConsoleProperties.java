@@ -19,7 +19,7 @@ package org.dpytel.intellij.plugin.maventest.view;
 import com.intellij.execution.Executor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
-import com.intellij.execution.runners.ExecutionEnvironment;
+import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import org.dpytel.intellij.plugin.maventest.actions.AutoRefreshAction;
 import org.dpytel.intellij.plugin.maventest.actions.RefreshViewAction;
@@ -44,8 +44,8 @@ public class MavenTestResultsConsoleProperties extends JUnitConsoleProperties {
     /**
      * Overrides base method in IntelliJ 15 EAP or just plain method invoked in toolbar panel
      */
-    protected void appendAdditionalActions(DefaultActionGroup actionGroup, ExecutionEnvironment environment,
-                                           JComponent parent) {
+    @Override
+    public void appendAdditionalActions(DefaultActionGroup actionGroup, JComponent parent, TestConsoleProperties target) {
         MavenTreeConsoleView consoleView = ((MavenTestResultsPanel) parent).getConsoleView();
         myRefreshViewAction = new RefreshViewAction(consoleView, myModel);
         actionGroup.addAction(myRefreshViewAction);
