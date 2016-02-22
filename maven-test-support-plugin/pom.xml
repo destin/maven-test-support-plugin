@@ -213,6 +213,9 @@
                     <arguments>
                         <argument>${basedir}/../../maven-test-support-plugin-test</argument>
                     </arguments>
+                    <environmentVariables>
+                        <IDEA_VM_OPTIONS>${basedir}/src/main/script/idea.vmoptions</IDEA_VM_OPTIONS>
+                    </environmentVariables>
                 </configuration>
             </plugin>
         </plugins>

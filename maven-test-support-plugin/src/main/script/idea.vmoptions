@@ -11,7 +11,6 @@
 -XX:+HeapDumpOnOutOfMemoryError
 -XX:-OmitStackTraceInFastThrow
 -Dawt.useSystemAAFontSettings=lcd
--agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8888
 -Didea.config.path=/tmp/IJ/config
 -Didea.system.path=/tmp/IJ/system
 -Didea.plugins.path=/tmp/IJ/plugins
