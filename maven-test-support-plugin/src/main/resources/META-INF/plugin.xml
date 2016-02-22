@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.18</version>
+  <version>0.0.19</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,10 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.19
+            <ul>
+            <li>Fixed #12 Refresh buttons disappeared in IJ 15
+            </ul>
       <li>0.0.18
             <ul>
             <li>Fixed #11 Crash in IntelliJ 16 EAP
