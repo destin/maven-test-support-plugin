@@ -16,6 +16,7 @@
 
 package org.dpytel.intellij.plugin.maventest.toolwindow;
 
+import com.intellij.execution.ExecutionException;
 import com.intellij.execution.Executor;
 import com.intellij.execution.configuration.ConfigurationFactoryEx;
 import com.intellij.execution.configurations.ConfigurationFactory;
@@ -25,8 +26,11 @@ import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
 import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
+import com.intellij.execution.process.NopProcessHandler;
+import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.testframework.TestConsoleProperties;
-import com.intellij.execution.testframework.sm.runner.ui.SMTRunnerConsoleView;
+import com.intellij.execution.testframework.sm.SMTestRunnerConnectionUtil;
+import com.intellij.execution.testframework.ui.BaseTestsOutputConsoleView;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComponentContainer;
 import com.intellij.openapi.util.Disposer;
@@ -44,7 +48,7 @@ import org.jetbrains.idea.maven.project.MavenProject;
  */
 public class MavenToolWindow {
 
-    public static final String TOOL_WINDOW_ID = "Maven test results";
+    private static final String TOOL_WINDOW_ID = "Maven test results";
     private static final String TOOL_WINDOW_ICON = "/icons/showResultsToolWindow.png";
     private final Project project;
     private final MavenProject mavenProject;
@@ -67,8 +71,13 @@ public class MavenToolWindow {
         JUnitConfiguration configuration = new JUnitConfiguration(project.getName(), project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
         TestConsoleProperties consoleProperties = new JUnitConsoleProperties(configuration, executor);
-        SMTRunnerConsoleView consoleView = new SMTRunnerConsoleView(consoleProperties);
-        consoleView.initUI();
+        ProcessHandler processHandler = new NopProcessHandler();
+        BaseTestsOutputConsoleView consoleView;
+        try {
+            consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(TOOL_WINDOW_ID, processHandler, consoleProperties);
+        } catch (ExecutionException e) {
+            throw new RuntimeException(e);
+        }
         showInToolWindow(consoleView, mavenProject.getFinalName());
     }
 
