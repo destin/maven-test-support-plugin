@@ -16,9 +16,11 @@
 import org.apache.commons.configuration.PropertiesConfiguration
 import org.apache.commons.configuration.PropertiesConfigurationLayout
 
-def installDir = new File(properties.getProperty('intellij.install.dir'))
+def installDir = new File(properties.getProperty('intellij.install.dir') as String)
 
 def intellijPropertiesFile = new File(installDir, "bin/idea.properties")
+
+println "Installing plugin to: $intellijPropertiesFile"
 
 PropertiesConfiguration config = new PropertiesConfiguration()
 PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config)
