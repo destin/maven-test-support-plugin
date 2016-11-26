@@ -19,8 +19,6 @@ package org.dpytel.intellij.plugin.maventest.actions;
 import com.intellij.openapi.actionSystem.*;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import org.dpytel.intellij.plugin.maventest.model.MavenTestsModel;
-import org.dpytel.intellij.plugin.maventest.toolwindow.MavenToolWindow;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.idea.maven.project.MavenProject;
 import org.jetbrains.idea.maven.utils.actions.MavenActionUtil;
@@ -39,8 +37,8 @@ public class ShowTestResultsAction extends AnAction {
         Project project = event.getData(PlatformDataKeys.PROJECT);
         MavenProject mavenProject = MavenActionUtil.getMavenProject(event.getDataContext());
 
-        MavenToolWindow window = new MavenToolWindow(new MavenTestsModel(project, mavenProject));
-        window.showMavenToolWindow(mavenProject);
+//        MavenToolWindow window = new MavenToolWindow(new MavenTestsModel(project, mavenProject));
+//        window.showMavenToolWindow(mavenProject);
     }
 
     @Override

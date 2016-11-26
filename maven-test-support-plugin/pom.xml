@@ -203,21 +203,7 @@
             </plugin>
 
 
-            <!-- Run IntelliJ with plugin -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>1.4.0</version>
-                <configuration>
-                    <executable>${intellij.path}/bin/idea.sh</executable>
-                    <arguments>
-                        <argument>${basedir}/../../maven-test-support-plugin-test</argument>
-                    </arguments>
-                    <environmentVariables>
-                        <IDEA_VM_OPTIONS>${basedir}/src/main/script/idea.vmoptions</IDEA_VM_OPTIONS>
-                    </environmentVariables>
-                </configuration>
-            </plugin>
+
         </plugins>
     </build>
 

@@ -24,7 +24,7 @@
         <processorPath useClasspath="true" />
         <module name="maven-test-support-plugin (1)" />
       </profile>
-      <profile default="false" name="Annotation profile for maven-test-support-plugin" enabled="true">
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />

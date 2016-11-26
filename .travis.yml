@@ -1,7 +1,7 @@
 language: java
 jdk: oraclejdk8
 env:
-    - PROFILE=IJ15
-    - PROFILE=IJ16EAP
+    - PROFILE=IJ2016.2
+    - PROFILE=IJ2016.3
 install: mvn install -DskipTests=true -P$PROFILE
 script: mvn test -P$PROFILE

@@ -20,9 +20,9 @@ def installDir = new File(properties.getProperty('intellij.install.dir'))
 
 def intellijPropertiesFile = new File(installDir, "bin/idea.properties")
 
-PropertiesConfiguration config = new PropertiesConfiguration();
-PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config);
-layout.load(new InputStreamReader(new FileInputStream(intellijPropertiesFile)));
+PropertiesConfiguration config = new PropertiesConfiguration()
+PropertiesConfigurationLayout layout = new PropertiesConfigurationLayout(config)
+layout.load(new InputStreamReader(new FileInputStream(intellijPropertiesFile)))
 
-config.setProperty("plugin.path", properties.getProperty('plugin.jar'));
-layout.save(intellijPropertiesFile.newWriter());
+config.setProperty("plugin.path", properties.getProperty('plugin.jar'))
+layout.save(intellijPropertiesFile.newWriter())

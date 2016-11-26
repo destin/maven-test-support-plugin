@@ -47,6 +47,21 @@
                     <autoVersionSubmodules>true</autoVersionSubmodules>
                 </configuration>
             </plugin>
+            <!-- Run IntelliJ with plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <configuration>
+                    <executable>${intellij.install.dir}/bin/idea.sh</executable>
+                    <arguments>
+                        <argument>${basedir}/../maven-test-support-plugin-test</argument>
+                    </arguments>
+                    <environmentVariables>
+                        <IDEA_VM_OPTIONS>${basedir}/src/main/script/idea.vmoptions</IDEA_VM_OPTIONS>
+                    </environmentVariables>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
@@ -57,10 +72,18 @@
 
     <profiles>
         <profile>
-            <id>IJ16EAP</id>
+            <id>IJ2016.3</id>
             <properties>
-                <intellij.version>ideaIC-144.3891.8</intellij.version>
-                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-144.3891.8-custom-jdk-linux.tar.gz</intellij.install.downloadUrl>
+                <intellij.version>ideaIC-2016.3</intellij.version>
+                <intellij.install.downloadUrl>https://download-cf.jetbrains.com/idea/ideaIC-2016.3.tar.gz</intellij.install.downloadUrl>
+            </properties>
+        </profile>
+
+        <profile>
+            <id>IJ2016.2</id>
+            <properties>
+                <intellij.version>ideaIC-2016.2.5</intellij.version>
+                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-2016.2.5.tar.gz</intellij.install.downloadUrl>
             </properties>
         </profile>
 
