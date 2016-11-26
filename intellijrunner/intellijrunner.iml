@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_5" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/target/classes" />
+    <output-test url="file://$MODULE_DIR$/target/test-classes" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-archiver:3.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-utils:3.0.20" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-io:2.6" level="project" />
+    <orderEntry type="library" name="Maven: commons-io:commons-io:2.2" level="project" />
+    <orderEntry type="library" name="Maven: org.iq80.snappy:snappy:0.3" level="project" />
+    <orderEntry type="library" name="Maven: org.codehaus.plexus:plexus-container-default:1.0-alpha-9-stable-1" level="project" />
+    <orderEntry type="library" name="Maven: junit:junit:3.8.1" level="project" />
+    <orderEntry type="library" name="Maven: classworlds:classworlds:1.1-alpha-2" level="project" />
+    <orderEntry type="module" module-name="maven-test-support-plugin" />
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij.openapi:openapi:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/openapi/openapi/1/openapi-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij.openapi:extensions:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/openapi/extensions/1/extensions-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij:util:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/util/1/util-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij:idea:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/idea/1/idea-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij:idea_rt:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/idea_rt/1/idea_rt-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: org.jetbrains:annotations:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/1/annotations-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: org.jdom:jdom:0.2">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/jdom/jdom/0.2/jdom-0.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: log4j:log4j:1.2.17">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/log4j/log4j/1.2.17/log4j-1.2.17.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij.plugins:junit:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/plugins/junit/1/junit-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij.plugins:maven:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/plugins/maven/1/maven-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: com.intellij.plugins:maven-server-api:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/com/intellij/plugins/maven-server-api/1/maven-server-api-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: net.sf.trove4j:trove4j:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/net/sf/trove4j/trove4j/1/trove4j-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: kotlin:kotlin-runtime.jar:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/kotlin/kotlin-runtime.jar/1/kotlin-runtime.jar-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: org.picocontainer:picocontainer:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/picocontainer/picocontainer/1/picocontainer-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="Maven: resources:resources_en:1">
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/resources/resources_en/1/resources_en-1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+  </component>
+</module>

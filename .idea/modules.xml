@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/intellij-installer/intellij-installer.iml" filepath="$PROJECT_DIR$/intellij-installer/intellij-installer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/intellijrunner/intellijrunner.iml" filepath="$PROJECT_DIR$/intellijrunner/intellijrunner.iml" />
       <module fileurl="file://$PROJECT_DIR$/maven-test-support-plugin/maven-test-support-plugin.iml" filepath="$PROJECT_DIR$/maven-test-support-plugin/maven-test-support-plugin.iml" />
       <module fileurl="file://$PROJECT_DIR$/maven-test-support-plugin-parent.iml" filepath="$PROJECT_DIR$/maven-test-support-plugin-parent.iml" />
     </modules>
