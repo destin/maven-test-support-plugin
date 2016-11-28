@@ -70,7 +70,7 @@ public class MavenToolWindow {
         JUnitConfiguration configuration = new JUnitConfiguration(project.getName(), project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
         ProcessHandler processHandler = new NopProcessHandler();
-        TestConsoleProperties consoleProperties = new MavenTestConsoleProperties(project, executor, configuration, processHandler);
+        TestConsoleProperties consoleProperties = new MavenTestConsoleProperties(mavenProject, project, executor, configuration, processHandler);
         BaseTestsOutputConsoleView consoleView;
         try {
             consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(TOOL_WINDOW_ID, processHandler, consoleProperties);

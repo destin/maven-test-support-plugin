@@ -22,23 +22,25 @@ import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.testframework.TestConsoleProperties;
 import com.intellij.execution.testframework.sm.SMCustomMessagesParsing;
 import com.intellij.execution.testframework.sm.runner.OutputToGeneralTestEventsConverter;
-import com.intellij.execution.testframework.sm.runner.events.TestFinishedEvent;
-import com.intellij.execution.testframework.sm.runner.events.TestStartedEvent;
 import com.intellij.ide.util.PropertiesComponent;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.util.config.Storage;
+import org.dpytel.intellij.plugin.maventest.SurefireTestReportsParser;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.idea.maven.project.MavenProject;
 
 /**
  *
  */
 public class MavenTestConsoleProperties extends TestConsoleProperties implements SMCustomMessagesParsing {
+    private final MavenProject mavenProject;
     private final RunProfile configuration;
     private final ProcessHandler processHandler;
 
-    public MavenTestConsoleProperties(Project project, Executor executor, RunProfile configuration, ProcessHandler processHandler) {
+    public MavenTestConsoleProperties(MavenProject mavenProject, Project project, Executor executor, RunProfile configuration, ProcessHandler processHandler) {
         super(new Storage.PropertiesComponentStorage("MavenTestSupport.", PropertiesComponent.getInstance()), project, executor);
+        this.mavenProject = mavenProject;
         this.configuration = configuration;
         this.processHandler = processHandler;
     }
@@ -54,10 +56,8 @@ public class MavenTestConsoleProperties extends TestConsoleProperties implements
             @Override
             public void onStartTesting() {
                 ApplicationManager.getApplication().executeOnPooledThread(() -> {
-                    getProcessor().onRootPresentationAdded("Testy projektu", null, null);
-
-                    getProcessor().onTestStarted(new TestStartedEvent("someTest", "someTest"));
-                    getProcessor().onTestFinished(new TestFinishedEvent("someTest", "someTest", 400));
+                    SurefireTestReportsParser parser = new SurefireTestReportsParser(mavenProject, getProject(), getProcessor());
+                    parser.parseReports();
                     processHandler.detachProcess();
                 });
             }
