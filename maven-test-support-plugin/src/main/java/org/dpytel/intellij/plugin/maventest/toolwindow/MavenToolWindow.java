@@ -25,7 +25,6 @@ import com.intellij.execution.configurations.RunConfiguration;
 import com.intellij.execution.executors.DefaultRunExecutor;
 import com.intellij.execution.junit.JUnitConfiguration;
 import com.intellij.execution.junit.JUnitConfigurationType;
-import com.intellij.execution.junit2.ui.properties.JUnitConsoleProperties;
 import com.intellij.execution.process.NopProcessHandler;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.testframework.TestConsoleProperties;
@@ -70,8 +69,8 @@ public class MavenToolWindow {
         };
         JUnitConfiguration configuration = new JUnitConfiguration(project.getName(), project, configurationFactory);
         Executor executor = new DefaultRunExecutor();
-        TestConsoleProperties consoleProperties = new JUnitConsoleProperties(configuration, executor);
         ProcessHandler processHandler = new NopProcessHandler();
+        TestConsoleProperties consoleProperties = new MavenTestConsoleProperties(project, executor, configuration, processHandler);
         BaseTestsOutputConsoleView consoleView;
         try {
             consoleView = SMTestRunnerConnectionUtil.createAndAttachConsole(TOOL_WINDOW_ID, processHandler, consoleProperties);
@@ -79,6 +78,7 @@ public class MavenToolWindow {
             throw new RuntimeException(e);
         }
         showInToolWindow(consoleView, mavenProject.getFinalName());
+        processHandler.startNotify();
     }
 
     private void showInToolWindow(ComponentContainer consoleView, String tabName) {

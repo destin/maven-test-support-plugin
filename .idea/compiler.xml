@@ -26,11 +26,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="intellij-installer" target="1.5" />
-      <module name="intellijrunner" target="1.5" />
-      <module name="maven-test-support-plugin" target="1.6" />
+      <module name="intellij-installer" target="1.8" />
+      <module name="intellijrunner" target="1.8" />
+      <module name="maven-test-support-plugin" target="1.8" />
       <module name="maven-test-support-plugin (1)" target="1.6" />
-      <module name="maven-test-support-plugin-parent" target="1.5" />
+      <module name="maven-test-support-plugin-parent" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

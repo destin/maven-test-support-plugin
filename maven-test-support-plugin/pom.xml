@@ -72,6 +72,13 @@
             <systemPath>${intellij.lib.path}/idea_rt.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>jetbrains</groupId>
+            <artifactId>serviceMessages</artifactId>
+            <version>1</version>
+            <scope>system</scope>
+            <systemPath>${intellij.lib.path}/serviceMessages.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>1</version>
