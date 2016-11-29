@@ -17,6 +17,8 @@
 package org.dpytel.intellij.plugin.maventest;
 
 import com.intellij.execution.testframework.sm.runner.GeneralTestEventsProcessor;
+import com.intellij.execution.testframework.sm.runner.events.TestSuiteFinishedEvent;
+import com.intellij.execution.testframework.sm.runner.events.TestSuiteStartedEvent;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -49,10 +51,6 @@ public class SurefireTestReportsParser {
     }
 
     public void parseReports() {
-        parseReports(mavenProject);
-    }
-
-    private void parseReports(MavenProject mavenProject) {
         MavenId mavenId = mavenProject.getMavenId();
         testEventsProcessor.onRootPresentationAdded(mavenId.getArtifactId(), mavenId.getDisplayString(), null);
         parseReportFiles(mavenProject.getDirectoryFile());
@@ -73,7 +71,7 @@ public class SurefireTestReportsParser {
                 processReportsDir(target, SUREFIRE_REPORTS_DIR);
                 processReportsDir(target, FAILSAFE_REPORTS_DIR);
             }
-            // TODO processSubProjects(baseDir, root);
+            processSubProjects(baseDir);
         }
     }
 
@@ -98,7 +96,6 @@ public class SurefireTestReportsParser {
     }
 
     private void parseAndAddToRoot(VirtualFile child) {
-
         try {
             ReportParser reportParser = new ReportParser(testEventsProcessor);
             reportParser.parseTestSuite(child);
@@ -106,6 +103,18 @@ public class SurefireTestReportsParser {
             LOGGER.error("Cannot open file: " + child.getCanonicalPath(), e);
         } catch (JDOMException e) {
             LOGGER.error("Cannot parse file: " + child.getCanonicalPath(), e);
+        }
+    }
+
+    private void processSubProjects(VirtualFile baseDir) {
+        for (VirtualFile child : baseDir.getChildren()) {
+            final MavenProject childMavenProject = getMavenProject(child);
+            if (childMavenProject != null) {
+                String suiteName = childMavenProject.getMavenId().getArtifactId();
+                testEventsProcessor.onSuiteStarted(new TestSuiteStartedEvent(suiteName, null));
+                parseReportFiles(childMavenProject.getDirectoryFile());
+                testEventsProcessor.onSuiteFinished(new TestSuiteFinishedEvent(suiteName));
+            }
         }
     }
 
