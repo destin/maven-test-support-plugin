@@ -1,7 +1,7 @@
 <idea-plugin version="2">
   <id>org.dpytel.intellij.plugin.maventest</id>
   <name>Maven Test Support Plugin</name>
-  <version>0.0.19</version>
+  <version>0.0.20</version>
   <vendor url="https://github.com/destin/maven-test-support-plugin/wiki">Dawid Pytel</vendor>
 
   <description><![CDATA[
@@ -17,6 +17,18 @@
 
   <change-notes><![CDATA[
       <ul>
+      <li>0.0.20
+            <ul>
+            <li>Initial support for IntelliJ 2016.3. The plugin had to be rewritten so many features no longer work, like:
+                <ul>
+                    <li>navigating to code
+                    <li>showing test duration
+                    <li>refreshing
+                    <li>test results for projects without tests display "The framework quite unexpectedly"
+                    <li>refresh and auto refresh
+                </ul>
+            <li>Remaining problems will be fixed in upcoming versions
+            </ul>
       <li>0.0.19
             <ul>
             <li>Fixed #12 Refresh buttons disappeared in IJ 15
@@ -108,7 +120,7 @@
 
   <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html
        for description -->
-  <idea-version since-build="143"/>
+  <idea-version since-build="163"/>
 
   <!-- please see http://confluence.jetbrains.net/display/IDEADEV/Plugin+Compatibility+with+IntelliJ+Platform+Products
        on how to target different products -->
