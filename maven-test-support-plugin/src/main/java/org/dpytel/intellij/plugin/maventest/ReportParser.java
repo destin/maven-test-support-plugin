@@ -18,6 +18,7 @@ package org.dpytel.intellij.plugin.maventest;
 
 import com.intellij.execution.testframework.sm.runner.GeneralTestEventsProcessor;
 import com.intellij.execution.testframework.sm.runner.events.*;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import jetbrains.buildServer.messages.serviceMessages.TestIgnored;
 import jetbrains.buildServer.messages.serviceMessages.TestStarted;
@@ -80,9 +81,9 @@ public class ReportParser {
         testEventsProcessor.onTestStarted(testStartedEvent);
 
         List children = testcase.getChildren();
+        Long duration = getDuration(testcase);
         if (children.size() == 0) {
-            // TODO duration
-            testEventsProcessor.onTestFinished(new TestFinishedEvent(methodName, null));
+            reportTestFinished(methodName, duration);
         } else {
             Element errorOrFailure = (Element) children.get(0);
             String stateName = errorOrFailure.getName();
@@ -117,8 +118,25 @@ public class ReportParser {
                     throw new IllegalStateException("Unknown state: " + stateName);
                 }
                 String failureMessage = errorOrFailure.getAttributeValue("message", "");
-                testEventsProcessor.onTestFailure(new TestFailedEvent(methodName, failureMessage, null, testError, null, null));
+                reportTestFailure(methodName, testError, failureMessage);
+                reportTestFinished(methodName, duration);
             }
         }
+    }
+
+    private void reportTestFinished(String methodName, Long duration) {
+        testEventsProcessor.onTestFinished(new TestFinishedEvent(methodName, duration));
+    }
+
+    private void reportTestFailure(String methodName, boolean testError, String failureMessage) {
+        testEventsProcessor.onTestFailure(new TestFailedEvent(methodName, failureMessage, null, testError, null, null));
+    }
+
+    private Long getDuration(Element testcase) {
+        String timeValue = testcase.getAttributeValue("time", (String) null);
+        if (StringUtil.isEmpty(timeValue)) {
+            return null;
+        }
+        return (long)(Double.parseDouble(timeValue) * 1000);
     }
 }
