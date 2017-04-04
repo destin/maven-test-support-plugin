@@ -82,7 +82,7 @@ public class ReportParser {
         List children = testcase.getChildren();
         if (children.size() == 0) {
             // TODO duration
-            testEventsProcessor.onTestFinished(new TestFinishedEvent(methodName, null, 0));
+            testEventsProcessor.onTestFinished(new TestFinishedEvent(methodName, null));
         } else {
             Element errorOrFailure = (Element) children.get(0);
             String stateName = errorOrFailure.getName();

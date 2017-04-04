@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
-  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
+  <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8">
     <output url="file://$MODULE_DIR$/target/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
@@ -15,18 +15,16 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.openapi:openapi:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/openapi.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/openapi.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/lang-api/src" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.openapi:extensions:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/extensions.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/extensions.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -35,7 +33,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:util:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/util.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/util.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -44,25 +42,16 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:idea:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/idea.jar!/" />
         </CLASSES>
         <JAVADOC />
-        <SOURCES>
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/java/testFramework/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/smRunner/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/testFramework/bootstrap/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/testFramework/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/testGuiFramework/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/testRunner/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/lang-impl/src" />
-          <root url="jar://$USER_HOME$/Pobrane/intellij-community-idea-163.7743.zip!/intellij-community-idea-163.7743/platform/lang-impl/src" />
-        </SOURCES>
+        <SOURCES />
       </library>
     </orderEntry>
     <orderEntry type="module-library">
       <library name="Maven: com.intellij:idea_rt:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/idea_rt.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/idea_rt.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -71,7 +60,7 @@
     <orderEntry type="module-library">
       <library name="Maven: jetbrains:serviceMessages:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/serviceMessages.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/serviceMessages.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -80,7 +69,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.jetbrains:annotations:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/annotations.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/annotations.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -89,7 +78,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.jdom:jdom:0.2">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/jdom.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/jdom.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -98,7 +87,7 @@
     <orderEntry type="module-library">
       <library name="Maven: log4j:log4j:1.2.17">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/log4j.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/log4j.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -107,7 +96,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:junit:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/junit/lib/idea-junit.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/plugins/junit/lib/idea-junit.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -116,7 +105,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:maven:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/maven/lib/maven.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/plugins/maven/lib/maven.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -125,7 +114,7 @@
     <orderEntry type="module-library">
       <library name="Maven: com.intellij.plugins:maven-server-api:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/plugins/maven/lib/maven-server-api.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/plugins/maven/lib/maven-server-api.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -137,7 +126,7 @@
     <orderEntry type="module-library">
       <library name="Maven: net.sf.trove4j:trove4j:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/trove4j.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/trove4j.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -146,7 +135,7 @@
     <orderEntry type="module-library">
       <library name="Maven: kotlin:kotlin-runtime.jar:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/kotlin-runtime.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/kotlin-runtime.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -155,7 +144,7 @@
     <orderEntry type="module-library">
       <library name="Maven: org.picocontainer:picocontainer:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/picocontainer.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/picocontainer.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />
@@ -164,7 +153,7 @@
     <orderEntry type="module-library">
       <library name="Maven: resources:resources_en:1">
         <CLASSES>
-          <root url="jar://$APPLICATION_HOME_DIR$/lib/resources_en.jar!/" />
+          <root url="jar://$USER_HOME$/temp/intellij/ideaIC-2017.1/lib/resources_en.jar!/" />
         </CLASSES>
         <JAVADOC />
         <SOURCES />

@@ -72,26 +72,10 @@
 
     <profiles>
         <profile>
-            <id>IJ2016.3</id>
+            <id>IJ2017.1</id>
             <properties>
-                <intellij.version>ideaIC-2016.3</intellij.version>
-                <intellij.install.downloadUrl>https://download-cf.jetbrains.com/idea/ideaIC-2016.3.tar.gz</intellij.install.downloadUrl>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>IJ2016.2</id>
-            <properties>
-                <intellij.version>ideaIC-2016.2.5</intellij.version>
-                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-2016.2.5.tar.gz</intellij.install.downloadUrl>
-            </properties>
-        </profile>
-
-        <profile>
-            <id>IJ15</id>
-            <properties>
-                <intellij.version>ideaIC-15.0.3</intellij.version>
-                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-15.0.3.tar.gz</intellij.install.downloadUrl>
+                <intellij.version>ideaIC-2017.1</intellij.version>
+                <intellij.install.downloadUrl>https://download.jetbrains.com/idea/ideaIC-2017.1.tar.gz</intellij.install.downloadUrl>
             </properties>
         </profile>
 
