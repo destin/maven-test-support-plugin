@@ -118,7 +118,8 @@ public class ReportParser {
                     throw new IllegalStateException("Unknown state: " + stateName);
                 }
                 String failureMessage = errorOrFailure.getAttributeValue("message", "");
-                reportTestFailure(methodName, testError, failureMessage);
+                String stackTrace = errorOrFailure.getValue();
+                reportTestFailure(methodName, testError, failureMessage, stackTrace);
                 reportTestFinished(methodName, duration);
             }
         }
@@ -128,8 +129,8 @@ public class ReportParser {
         testEventsProcessor.onTestFinished(new TestFinishedEvent(methodName, duration));
     }
 
-    private void reportTestFailure(String methodName, boolean testError, String failureMessage) {
-        testEventsProcessor.onTestFailure(new TestFailedEvent(methodName, failureMessage, null, testError, null, null));
+    private void reportTestFailure(String methodName, boolean testError, String failureMessage, String stackTrace) {
+        testEventsProcessor.onTestFailure(new TestFailedEvent(methodName, failureMessage, stackTrace, testError, null, null));
     }
 
     private Long getDuration(Element testcase) {
